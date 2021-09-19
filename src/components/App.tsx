@@ -1,8 +1,17 @@
-import { FC } from "react";
+import { FC, useState } from 'react';
+import GoogleMapsLocation from './GoogleMapsLocation';
 
 const App: FC = (): JSX.Element => {
-    return <h1>App</h1>
-}
+  const [coords, setCoords] = useState({ lat: 0, lng: 0 });
+
+  return (
+    <div>
+      <h2>
+        {coords.lat}, {coords.lng}
+      </h2>
+      <GoogleMapsLocation setCoords={setCoords} />
+    </div>
+  );
+};
 
 export default App;
-
