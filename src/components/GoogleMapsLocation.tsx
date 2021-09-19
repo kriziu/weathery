@@ -2,12 +2,13 @@ import { FC, useEffect, useState } from 'react';
 
 import { Input } from '@chakra-ui/input';
 import { Spinner } from '@chakra-ui/spinner';
+import { Box, Center } from '@chakra-ui/layout';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
-import { Box, Center } from '@chakra-ui/layout';
+import Geocode from 'react-geocode';
 
 interface GoogleMapsLocationProps {
   setCoords: React.Dispatch<
@@ -30,14 +31,57 @@ const GoogleMapsLocation: FC<GoogleMapsLocationProps> = ({
     const result = await geocodeByAddress(value);
     const latLng = await getLatLng(result[0]);
     setCoords(latLng);
-    setAppLocation(value);
+    setCity(latLng);
     setLocation('');
   };
 
+  const setCity = (coords: { lat: number; lng: number }) => {
+    Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString()).then(
+      response => {
+        let city, state, country;
+        for (
+          let i = 0;
+          i < response.results[0].address_components.length;
+          i++
+        ) {
+          for (
+            let j = 0;
+            j < response.results[0].address_components[i].types.length;
+            j++
+          ) {
+            switch (response.results[0].address_components[i].types[j]) {
+              case 'locality':
+                city = response.results[0].address_components[i].long_name;
+                break;
+              case 'administrative_area_level_1':
+                state = response.results[0].address_components[i].long_name;
+                break;
+              case 'country':
+                country = response.results[0].address_components[i].long_name;
+                break;
+            }
+          }
+        }
+        setAppLocation(`${city}, ${state}, ${country}`);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  };
+
   useEffect(() => {
+    Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
+
     navigator.geolocation.getCurrentPosition(pos => {
-      setGeolocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      if (!coords) return;
+
+      setCity(coords);
+      setCoords(coords);
+      setGeolocation(coords);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -45,7 +89,10 @@ const GoogleMapsLocation: FC<GoogleMapsLocationProps> = ({
       value={location}
       onChange={setLocation}
       onSelect={handleLocationSelect}
-      searchOptions={{ types: ['(cities)'] }}
+      searchOptions={{
+        location: new google.maps.LatLng(geolocation),
+        radius: 2000,
+      }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <Box px={6}>
@@ -62,7 +109,6 @@ const GoogleMapsLocation: FC<GoogleMapsLocationProps> = ({
               const style = {
                 backgroundColor: suggestion.active ? 'black' : 'white',
               };
-
               return (
                 <div {...getSuggestionItemProps(suggestion, { style })} key={i}>
                   {suggestion.description}

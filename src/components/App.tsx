@@ -11,15 +11,15 @@ const App: FC = (): JSX.Element => {
 
   return (
     <ChakraProvider>
-      <Box>
-        <Heading size="xl" textAlign="center">
+      <Box p={[5, 10]}>
+        <Heading size="xl" textAlign="center" mb={5}>
           {location}
         </Heading>
-
         <GoogleMapsLocation
           setCoords={setCoords}
           setAppLocation={setLocation}
         />
+        dwadw
       </Box>
     </ChakraProvider>
   );
