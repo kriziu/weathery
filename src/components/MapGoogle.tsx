@@ -1,6 +1,12 @@
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { FC } from 'react';
 
-const MapGoogle = withGoogleMap<{
+const mapStyles = {
+  height: '100%',
+  width: '100%',
+};
+
+interface MapGoogleProps {
   coords: { lat: number; lng: number };
   setCoords: React.Dispatch<
     React.SetStateAction<{
@@ -8,20 +14,27 @@ const MapGoogle = withGoogleMap<{
       lng: number;
     }>
   >;
-}>(props => {
+}
+
+const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
   const handleMapClick = (e: any): void => {
-    props.setCoords({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+    setCoords({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
 
-  let geoCoords = props.coords;
+  let geoCoords = coords;
 
-  if (props.coords.lat === 0 && props.coords.lng === 0)
+  if (coords.lat === 0 && coords.lng === 0)
     geoCoords = { lat: 52.2297, lng: 21.0122 };
 
   return (
-    <GoogleMap defaultZoom={8} center={geoCoords} onClick={handleMapClick}>
+    <GoogleMap
+      zoom={8}
+      center={geoCoords}
+      onClick={handleMapClick}
+      mapContainerStyle={mapStyles}
+    >
       <Marker position={geoCoords} />
     </GoogleMap>
   );
-});
+};
 export default MapGoogle;

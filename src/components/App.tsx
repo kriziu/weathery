@@ -72,12 +72,9 @@ const App: FC = (): JSX.Element => {
           {location}
         </Heading>
         <InputLocation setCoords={setCoords} />
-        <MapGoogle
-          coords={coords}
-          setCoords={setCoords}
-          containerElement={<Box p={[5, 10]} height="sm" />}
-          mapElement={<Box p={[5, 10]} height="sm" />}
-        />
+        <Box p={[5, 10]} height="sm">
+          <MapGoogle coords={coords} setCoords={setCoords} />
+        </Box>
       </Box>
     </ChakraProvider>
   );
