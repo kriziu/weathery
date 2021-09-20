@@ -1,13 +1,17 @@
+import { FC, useState } from 'react';
+
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Box } from '@chakra-ui/layout';
 import { Switch } from '@chakra-ui/switch';
 import { Collapse } from '@chakra-ui/transition';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { FC, useState } from 'react';
+
+import { borderRadius } from '../constants/styles';
 
 const mapStyles = {
   height: '100%',
   width: '100%',
+  borderRadius: borderRadius,
 };
 
 const mapOptions: google.maps.MapOptions = {

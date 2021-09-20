@@ -3,12 +3,13 @@ import { FC, useEffect, useState } from 'react';
 import { Input } from '@chakra-ui/input';
 import { Spinner } from '@chakra-ui/spinner';
 import { Box, Center, List, ListItem } from '@chakra-ui/layout';
+import { Collapse } from '@chakra-ui/transition';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
-import { Collapse } from '@chakra-ui/transition';
+import { borderRadius, borderWidth } from '../constants/styles';
 
 interface InputLocationProps {
   setCoords: React.Dispatch<
@@ -53,7 +54,7 @@ const InputLocation: FC<InputLocationProps> = ({ setCoords }): JSX.Element => {
       }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <Box px={6} position="relative">
+        <Box px={[5, 10]} position="relative">
           <Input {...getInputProps({ placeholder: 'Search location' })} />
 
           <Collapse in={loading} unmountOnExit>
@@ -67,7 +68,7 @@ const InputLocation: FC<InputLocationProps> = ({ setCoords }): JSX.Element => {
               zIndex={100}
               w="100%"
               spacing={2}
-              border="1px"
+              border={borderWidth}
               borderColor="gray.200"
               p={2}
               borderRadius={4}
@@ -75,7 +76,7 @@ const InputLocation: FC<InputLocationProps> = ({ setCoords }): JSX.Element => {
               {suggestions.map((suggestion, i) => {
                 const style = {
                   padding: '.5rem',
-                  borderRadius: '.5rem',
+                  borderRadius: borderRadius,
                   backgroundColor: suggestion.active ? '#e6e6e6' : '',
                 };
                 return (

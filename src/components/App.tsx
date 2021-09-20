@@ -6,6 +6,7 @@ import Geocode from 'react-geocode';
 
 import InputLocation from './InputLocation';
 import MapGoogle from './MapGoogle';
+import { getForecast } from '../api/forecast';
 
 interface GeocodeResponseType {
   results: {
@@ -21,11 +22,7 @@ const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
 
-  useEffect(() => {
-    Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
-  }, []);
-
-  useEffect(() => {
+  const changeLocation = (): void => {
     Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
       .then((response: GeocodeResponseType) => {
         let city = '',
@@ -62,16 +59,27 @@ const App: FC = (): JSX.Element => {
         setLocation(`${city} ${state} ${country}`);
       })
       .catch(() => {});
+  };
+
+  useEffect(() => {
+    Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
+  }, []);
+
+  useEffect(() => {
+    changeLocation();
+    getForecast(coords);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coords]);
 
   return (
     <ChakraProvider>
-      <Box p={[5, 10]}>
+      <Box p={[5, 10]} mt={5}>
         <Heading size="xl" textAlign="center" mb={5}>
           {location}
         </Heading>
         <InputLocation setCoords={setCoords} />
-        <Box p={[5, 10]} height="sm">
+        <Box px={[5, 10]} my={5} height="sm">
           <MapGoogle coords={coords} setCoords={setCoords} />
         </Box>
       </Box>
