@@ -66,7 +66,9 @@ const App: FC = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
+    if (coords.lat === 0 && coords.lng === 0) return;
     changeLocation();
+    console.log('e');
     getForecast(coords);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
