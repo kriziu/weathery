@@ -28,7 +28,6 @@ const App: FC = (): JSX.Element => {
   useEffect(() => {
     Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
       .then((response: GeocodeResponseType) => {
-        console.log(response);
         let city = '',
           state = '',
           country = '';

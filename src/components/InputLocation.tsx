@@ -2,12 +2,13 @@ import { FC, useEffect, useState } from 'react';
 
 import { Input } from '@chakra-ui/input';
 import { Spinner } from '@chakra-ui/spinner';
-import { Box, Center } from '@chakra-ui/layout';
+import { Box, Center, List, ListItem } from '@chakra-ui/layout';
 
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import { Collapse } from '@chakra-ui/transition';
 
 interface InputLocationProps {
   setCoords: React.Dispatch<
@@ -52,27 +53,42 @@ const InputLocation: FC<InputLocationProps> = ({ setCoords }): JSX.Element => {
       }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <Box px={6}>
+        <Box px={6} position="relative">
           <Input {...getInputProps({ placeholder: 'Search location' })} />
 
-          <Box>
-            {loading && (
-              <Center>
-                <Spinner />
-              </Center>
-            )}
+          <Collapse in={loading} unmountOnExit>
+            <Center mt={4}>
+              <Spinner />
+            </Center>
+          </Collapse>
 
-            {suggestions.map((suggestion, i) => {
-              const style = {
-                backgroundColor: suggestion.active ? 'black' : 'white',
-              };
-              return (
-                <div {...getSuggestionItemProps(suggestion, { style })} key={i}>
-                  {suggestion.description}
-                </div>
-              );
-            })}
-          </Box>
+          <Collapse in={suggestions.length ? true : false} unmountOnExit>
+            <List
+              zIndex={100}
+              w="100%"
+              spacing={2}
+              border="1px"
+              borderColor="gray.200"
+              p={2}
+              borderRadius={4}
+            >
+              {suggestions.map((suggestion, i) => {
+                const style = {
+                  padding: '.5rem',
+                  borderRadius: '.5rem',
+                  backgroundColor: suggestion.active ? '#e6e6e6' : '',
+                };
+                return (
+                  <ListItem
+                    {...getSuggestionItemProps(suggestion, { style })}
+                    key={i}
+                  >
+                    {suggestion.description}
+                  </ListItem>
+                );
+              })}
+            </List>
+          </Collapse>
         </Box>
       )}
     </PlacesAutocomplete>

@@ -1,9 +1,17 @@
+import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import { Box } from '@chakra-ui/layout';
+import { Switch } from '@chakra-ui/switch';
+import { Collapse } from '@chakra-ui/transition';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 const mapStyles = {
   height: '100%',
   width: '100%',
+};
+
+const mapOptions: google.maps.MapOptions = {
+  streetViewControl: false,
 };
 
 interface MapGoogleProps {
@@ -17,6 +25,8 @@ interface MapGoogleProps {
 }
 
 const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
+  const [visible, setVisible] = useState(false);
+
   const handleMapClick = (e: any): void => {
     setCoords({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
@@ -27,14 +37,29 @@ const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
     geoCoords = { lat: 52.2297, lng: 21.0122 };
 
   return (
-    <GoogleMap
-      zoom={8}
-      center={geoCoords}
-      onClick={handleMapClick}
-      mapContainerStyle={mapStyles}
-    >
-      <Marker position={geoCoords} />
-    </GoogleMap>
+    <Box h="100%" w="100%">
+      <FormControl display="flex" alignItems="center" mb={5}>
+        <FormLabel htmlFor="email-alerts" mb="0">
+          Google map
+        </FormLabel>
+        <Switch
+          id="email-alerts"
+          isChecked={visible}
+          onChange={() => setVisible(!visible)}
+        />
+      </FormControl>
+      <Collapse in={visible} endingHeight="100%">
+        <GoogleMap
+          zoom={8}
+          center={geoCoords}
+          onClick={handleMapClick}
+          mapContainerStyle={mapStyles}
+          options={mapOptions}
+        >
+          <Marker position={geoCoords} />
+        </GoogleMap>
+      </Collapse>
+    </Box>
   );
 };
 export default MapGoogle;
