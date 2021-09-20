@@ -7,6 +7,7 @@ interface Description {
   main: string;
 }
 
+// TODO: Dziedziczenie bo duzo pol sie powtarza
 export interface WeatherType {
   clouds: number;
   dew_point: number;
