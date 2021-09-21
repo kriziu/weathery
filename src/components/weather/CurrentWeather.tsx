@@ -14,6 +14,13 @@ import { TiWeatherCloudy } from 'react-icons/ti';
 import { FiSunrise, FiSunset } from 'react-icons/fi';
 import { FC } from 'react';
 
+// TODO: 
+// przeniesc uv do szczegolow razem z zachode i wshodem
+// wyswietlic deszcz
+// ujednolicic informacje (ma byc ciasno, dividery, zeby bylo widac sekcje)
+// popracowac nad ikona kolo glownej temperatury (jest za nisko)
+// godzinowa temperatura i deszcz oraz ikona
+
 const CurrentWeather: FC = (): JSX.Element => {
   return (
     <Box>
