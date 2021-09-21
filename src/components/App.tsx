@@ -7,6 +7,8 @@ import Geocode from 'react-geocode';
 import InputLocation from './InputLocation';
 import MapGoogle from './MapGoogle';
 import { getForecast } from '../api/forecast';
+import CurrentWeather from './weather/CurrentWeather';
+import FutureWeather from './weather/FutureWeather';
 
 interface GeocodeResponseType {
   results: {
@@ -22,68 +24,66 @@ const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
 
-  const changeLocation = (): void => {
-    Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
-      .then((response: GeocodeResponseType) => {
-        let city = '',
-          state = '',
-          country = '';
+  // const changeLocation = (): void => {
+  //   Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
+  //     .then((response: GeocodeResponseType) => {
+  //       let city = '',
+  //         state = '',
+  //         country = '';
 
-        response.results[0].address_components.forEach(addressComponent => {
-          addressComponent.types.forEach(type => {
-            switch (type) {
-              case 'neighborhood':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'postal_town':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'sublocality':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'locality':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'administrative_area_level_1':
-                state = addressComponent.long_name + ',';
-                break;
-              case 'administrative_area_level_2':
-                state = addressComponent.long_name + ',';
-                break;
-              case 'country':
-                country = addressComponent.long_name + ',';
-                break;
-            }
-          });
-        });
-        setLocation(`${city} ${state} ${country}`);
-      })
-      .catch(() => {});
-  };
+  //       response.results[0].address_components.forEach(addressComponent => {
+  //         addressComponent.types.forEach(type => {
+  //           switch (type) {
+  //             case 'neighborhood':
+  //               city = addressComponent.long_name + ',';
+  //               break;
+  //             case 'postal_town':
+  //               city = addressComponent.long_name + ',';
+  //               break;
+  //             case 'sublocality':
+  //               city = addressComponent.long_name + ',';
+  //               break;
+  //             case 'locality':
+  //               city = addressComponent.long_name + ',';
+  //               break;
+  //             case 'administrative_area_level_1':
+  //               state = addressComponent.long_name + ',';
+  //               break;
+  //             case 'administrative_area_level_2':
+  //               state = addressComponent.long_name + ',';
+  //               break;
+  //             case 'country':
+  //               country = addressComponent.long_name + ',';
+  //               break;
+  //           }
+  //         });
+  //       });
+  //       setLocation(`${city} ${state} ${country}`);
+  //     })
+  //     .catch(() => {});
+  // };
 
-  useEffect(() => {
-    Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
-  }, []);
+  // useEffect(() => {
+  //   Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
+  // }, []);
 
-  useEffect(() => {
-    if (coords.lat === 0 && coords.lng === 0) return;
-    changeLocation();
-    console.log('e');
-    getForecast(coords);
+  // useEffect(() => {
+  //   if (coords.lat === 0 && coords.lng === 0) return;
+  //   changeLocation();
+  //   console.log('e');
+  //   getForecast(coords);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coords]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [coords]);
 
   return (
     <ChakraProvider>
       <Box p={[5, 10]} mt={5}>
-        <Heading size="xl" textAlign="center" mb={5}>
+        <Heading size="xl" textAlign="center">
           {location}
         </Heading>
-        <InputLocation setCoords={setCoords} />
-        <Box px={[5, 10]} my={5} height="sm">
-          <MapGoogle coords={coords} setCoords={setCoords} />
-        </Box>
+        <CurrentWeather />
+        <FutureWeather />
       </Box>
     </ChakraProvider>
   );

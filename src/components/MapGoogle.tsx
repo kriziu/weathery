@@ -41,7 +41,7 @@ const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
     geoCoords = { lat: 52.2297, lng: 21.0122 };
 
   return (
-    <Box h="100%" w="100%">
+    <Box w="100%">
       <FormControl display="flex" alignItems="center" mb={5}>
         <FormLabel htmlFor="email-alerts" mb="0">
           Google map
@@ -52,7 +52,7 @@ const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
           onChange={() => setVisible(!visible)}
         />
       </FormControl>
-      <Collapse in={visible} endingHeight="100%">
+      <Collapse in={visible} endingHeight={300} startingHeight={0}>
         <GoogleMap
           zoom={8}
           center={geoCoords}
