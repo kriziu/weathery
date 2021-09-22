@@ -10,6 +10,7 @@ import { getForecast } from '../api/forecast';
 import CurrentWeather from './weather/CurrentWeather';
 import FutureWeather from './weather/FutureWeather';
 import styled from '@emotion/styled';
+import HourWeather from './weather/HourWeather';
 
 interface GeocodeResponseType {
   results: {
@@ -30,7 +31,9 @@ const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
 
-  getForecast({ lat: 49.963079, lng: 18.395276 });
+  // getForecast({ lat: 49.963079, lng: 18.395276 }).then(res =>
+  //   console.log(res.current.pressure)
+  // );
 
   // const changeLocation = (): void => {
   //   Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
@@ -103,6 +106,7 @@ const App: FC = (): JSX.Element => {
       </Box>
 
       <Box px={[5, 10]}>
+        <HourWeather />
         <FutureWeather />
       </Box>
     </ChakraProvider>

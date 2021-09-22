@@ -16,10 +16,6 @@ import { FC } from 'react';
 
 // TODO:
 // przeniesc uv do szczegolow razem z zachode i wshodem
-// wyswietlic deszcz
-// ujednolicic informacje (ma byc ciasno, dividery, zeby bylo widac sekcje)
-// popracowac nad ikona kolo glownej temperatury (jest za nisko)
-// godzinowa temperatura i deszcz oraz ikona
 
 const CurrentWeather: FC = (): JSX.Element => {
   return (
@@ -37,7 +33,7 @@ const CurrentWeather: FC = (): JSX.Element => {
           Feels like 28°
         </Heading>
       </Box>
-      <Flex mt={5}>
+      <Flex mt={5} px="10vw">
         <Stat textAlign="center">
           <StatLabel>Precipitation</StatLabel>
           <StatNumber>12%</StatNumber>

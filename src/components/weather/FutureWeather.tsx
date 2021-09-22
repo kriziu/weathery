@@ -13,7 +13,7 @@ import { FC } from 'react';
 const FutureWeather: FC = (): JSX.Element => {
   return (
     <Box>
-      <Flex justifyContent="space-between" alignItems="center">
+      <Flex justifyContent="space-between" alignItems="center" mb={4}>
         <Heading>Today</Heading>
         <Tag cursor="pointer" p={2} fontSize="md">
           See all
@@ -23,7 +23,7 @@ const FutureWeather: FC = (): JSX.Element => {
       <Flex justifyContent="space-between" alignItems="center">
         <Flex flexDirection="column" alignItems="center">
           <TiWeatherCloudy size={50} />
-          <Divider />
+          <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
             <StatNumber>24°</StatNumber>
             <StatLabel>Morning</StatLabel>
@@ -31,7 +31,7 @@ const FutureWeather: FC = (): JSX.Element => {
         </Flex>
         <Flex flexDirection="column" alignItems="center">
           <TiWeatherPartlySunny size={50} />
-          <Divider />
+          <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
             <StatNumber>30°</StatNumber>
             <StatLabel>Afternoon</StatLabel>
@@ -39,7 +39,7 @@ const FutureWeather: FC = (): JSX.Element => {
         </Flex>
         <Flex flexDirection="column" alignItems="center">
           <TiWeatherSunny size={50} />
-          <Divider />
+          <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
             <StatNumber>27°</StatNumber>
             <StatLabel>Evening</StatLabel>
@@ -47,7 +47,7 @@ const FutureWeather: FC = (): JSX.Element => {
         </Flex>
         <Flex flexDirection="column" alignItems="center">
           <TiWeatherNight size={50} />
-          <Divider />
+          <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
             <StatNumber>25°</StatNumber>
             <StatLabel>Night</StatLabel>
