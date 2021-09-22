@@ -1,13 +1,4 @@
-import {
-  Box,
-  Center,
-  Container,
-  Flex,
-  Heading,
-  HStack,
-  SimpleGrid,
-  Spacer,
-} from '@chakra-ui/layout';
+import { Box, Flex, Heading } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
 import {
@@ -16,13 +7,12 @@ import {
   TiWeatherPartlySunny,
   TiWeatherSunny,
 } from 'react-icons/ti';
-import { FiSunrise, FiSunset } from 'react-icons/fi';
 import { Tag } from '@chakra-ui/tag';
 import { FC } from 'react';
 
 const FutureWeather: FC = (): JSX.Element => {
   return (
-    <Box mt={20}>
+    <Box>
       <Flex justifyContent="space-between" alignItems="center">
         <Heading>Today</Heading>
         <Tag cursor="pointer" p={2} fontSize="md">
@@ -69,3 +59,20 @@ const FutureWeather: FC = (): JSX.Element => {
 };
 
 export default FutureWeather;
+
+{
+  /* <Flex mt={10} justifyContent="space-around">
+        <Flex flexDirection="column" justifyContent="center">
+          <Box m="auto">
+            <FiSunrise size={25} />
+          </Box>
+          <Heading size="xl">6:23</Heading>
+        </Flex>
+        <Flex flexDirection="column" justifyContent="center">
+          <Box m="auto">
+            <FiSunset size={25} />
+          </Box>
+          <Heading size="xl">19:57</Heading>
+        </Flex>
+      </Flex> */
+}
