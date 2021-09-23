@@ -46,7 +46,7 @@ const HourWeather: FC = (): JSX.Element => {
   return (
     <Box
       mb={14}
-      w={{ md: 96 }}
+      w={{ md: 500 }}
       ml={{ md: '50%' }}
       transform={{ md: 'translateX(-50%)' }}
       px={[5, 10]}

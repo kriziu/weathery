@@ -29,8 +29,6 @@ interface MapGoogleProps {
 }
 
 const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
-  const [visible, setVisible] = useState(false);
-
   const handleMapClick = (e: any): void => {
     setCoords({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
@@ -41,28 +39,16 @@ const MapGoogle: FC<MapGoogleProps> = ({ coords, setCoords }) => {
     geoCoords = { lat: 52.2297, lng: 21.0122 };
 
   return (
-    <Box w="100%">
-      <FormControl display="flex" alignItems="center" mb={5}>
-        <FormLabel htmlFor="email-alerts" mb="0">
-          Google map
-        </FormLabel>
-        <Switch
-          id="email-alerts"
-          isChecked={visible}
-          onChange={() => setVisible(!visible)}
-        />
-      </FormControl>
-      <Collapse in={visible} endingHeight={300} startingHeight={0}>
-        <GoogleMap
-          zoom={8}
-          center={geoCoords}
-          onClick={handleMapClick}
-          mapContainerStyle={mapStyles}
-          options={mapOptions}
-        >
-          <Marker position={geoCoords} />
-        </GoogleMap>
-      </Collapse>
+    <Box h={500}>
+      <GoogleMap
+        zoom={8}
+        center={geoCoords}
+        onClick={handleMapClick}
+        mapContainerStyle={mapStyles}
+        options={mapOptions}
+      >
+        <Marker position={geoCoords} />
+      </GoogleMap>
     </Box>
   );
 };

@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { Box, Heading } from '@chakra-ui/layout';
+import { Slide } from '@chakra-ui/transition';
 import Geocode from 'react-geocode';
 
 import InputLocation from './InputLocation';
@@ -12,7 +13,7 @@ import FutureWeather from './weather/FutureWeather';
 import styled from '@emotion/styled';
 import HourWeather from './weather/HourWeather';
 import { ParallaxProvider } from 'react-scroll-parallax';
-import DetailWeather from './weather/DetailWeather';
+import { borderRadius } from '../constants/styles';
 
 interface GeocodeResponseType {
   results: {
@@ -33,66 +34,80 @@ export const StyledSVG = styled.svg`
 const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
+  const [changingLocation, setChangingLocation] = useState(false);
 
-  // getForecast({ lat: 49.963079, lng: 18.395276 }).then(res =>
-  //   console.log(res.current.pressure)
-  // );
+  const changeLocation = (): void => {
+    Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
+      .then((response: GeocodeResponseType) => {
+        let city = '',
+          state = '',
+          country = '';
 
-  // const changeLocation = (): void => {
-  //   Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
-  //     .then((response: GeocodeResponseType) => {
-  //       let city = '',
-  //         state = '',
-  //         country = '';
+        response.results[0].address_components.forEach(addressComponent => {
+          addressComponent.types.forEach(type => {
+            switch (type) {
+              case 'neighborhood':
+                city = addressComponent.long_name + ',';
+                break;
+              case 'postal_town':
+                city = addressComponent.long_name + ',';
+                break;
+              case 'sublocality':
+                city = addressComponent.long_name + ',';
+                break;
+              case 'locality':
+                city = addressComponent.long_name + ',';
+                break;
+              case 'administrative_area_level_1':
+                state = addressComponent.long_name + ',';
+                break;
+              case 'administrative_area_level_2':
+                state = addressComponent.long_name + ',';
+                break;
+              case 'country':
+                country = addressComponent.long_name + ',';
+                break;
+            }
+          });
+        });
+        setLocation(`${city} ${state} ${country}`);
+      })
+      .catch(() => {});
+  };
 
-  //       response.results[0].address_components.forEach(addressComponent => {
-  //         addressComponent.types.forEach(type => {
-  //           switch (type) {
-  //             case 'neighborhood':
-  //               city = addressComponent.long_name + ',';
-  //               break;
-  //             case 'postal_town':
-  //               city = addressComponent.long_name + ',';
-  //               break;
-  //             case 'sublocality':
-  //               city = addressComponent.long_name + ',';
-  //               break;
-  //             case 'locality':
-  //               city = addressComponent.long_name + ',';
-  //               break;
-  //             case 'administrative_area_level_1':
-  //               state = addressComponent.long_name + ',';
-  //               break;
-  //             case 'administrative_area_level_2':
-  //               state = addressComponent.long_name + ',';
-  //               break;
-  //             case 'country':
-  //               country = addressComponent.long_name + ',';
-  //               break;
-  //           }
-  //         });
-  //       });
-  //       setLocation(`${city} ${state} ${country}`);
-  //     })
-  //     .catch(() => {});
-  // };
+  useEffect(() => {
+    Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
+  }, []);
 
-  // useEffect(() => {
-  //   Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
-  // }, []);
+  useEffect(() => {
+    if (coords.lat === 0 && coords.lng === 0) return;
+    changeLocation();
+    getForecast(coords);
+    setChangingLocation(false);
 
-  // useEffect(() => {
-  //   if (coords.lat === 0 && coords.lng === 0) return;
-  //   changeLocation();
-  //   console.log('e');
-  //   getForecast(coords);
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [coords]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coords]);
 
   return (
     <ParallaxProvider>
       <ChakraProvider>
+        <Slide in={changingLocation} direction="top" style={{ zIndex: 1000 }}>
+          <Box bgColor="white" w="full" height="full" px={5} pb={40}>
+            <Heading
+              size="xl"
+              textAlign="center"
+              pt={5}
+              onClick={() => setChangingLocation(!changingLocation)}
+            >
+              {location}
+            </Heading>
+            <InputLocation setCoords={setCoords} />
+            <Box p={[5, 10]} height="sm">
+              <MapGoogle coords={coords} setCoords={setCoords} />
+            </Box>{' '}
+          </Box>
+        </Slide>
+
         <Box
           bgGradient="linear(to-tr, yellow.300, orange.400)"
           position="fixed"
@@ -101,7 +116,12 @@ const App: FC = (): JSX.Element => {
           pb={60}
         >
           <Box p={[5, 10]} position="relative" pb={0}>
-            <Heading size="xl" textAlign="center" pt={5}>
+            <Heading
+              size="xl"
+              textAlign="center"
+              pt={5}
+              onClick={() => setChangingLocation(!changingLocation)}
+            >
               {location}
             </Heading>
             <CurrentWeather />
@@ -126,7 +146,6 @@ const App: FC = (): JSX.Element => {
           <Box bgColor={'white'}>
             <HourWeather />
             <FutureWeather />
-            <DetailWeather />
           </Box>
         </Box>
       </ChakraProvider>

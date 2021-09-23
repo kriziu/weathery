@@ -83,7 +83,5 @@ export const getForecast = async (coords: {
 
   const weather: ResponseDataType = result.data;
 
-  console.log(tempConverter('F', weather.current.temp));
-
   return weather;
 };
