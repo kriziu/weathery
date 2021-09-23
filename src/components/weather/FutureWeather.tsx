@@ -12,7 +12,7 @@ import { FC } from 'react';
 
 const FutureWeather: FC = (): JSX.Element => {
   return (
-    <Box>
+    <Box >
       <Flex justifyContent="space-between" alignItems="center" mb={4}>
         <Heading>Today</Heading>
         <Tag cursor="pointer" p={2} fontSize="md">

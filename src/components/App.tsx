@@ -30,6 +30,16 @@ const StyledSVG = styled.svg`
 const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
+  const [scroll, setScroll] = useState(0);
+  
+  const handleScroll = () => setScroll(window.scrollY);
+
+  useEffect(() => {
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+          window.removeEventListener('scroll', handleScroll);
+      }
+  }, [])
 
   // getForecast({ lat: 49.963079, lng: 18.395276 }).then(res =>
   //   console.log(res.current.pressure)
@@ -89,7 +99,7 @@ const App: FC = (): JSX.Element => {
 
   return (
     <ChakraProvider>
-      <Box bgGradient="linear(to-tr, yellow.300, orange.400)">
+      <Box bgGradient="linear(to-tr, yellow.300, orange.400)" transform={`translateY(${scroll}px)`}>
         <Box p={[5, 10]} position="relative" pb={0}>
           <Heading size="xl" textAlign="center" pt={5}>
             {location}
@@ -105,7 +115,7 @@ const App: FC = (): JSX.Element => {
         </StyledSVG>
       </Box>
 
-      <Box px={[5, 10]}>
+      <Box px={[5, 10]} transform={`translateY(-${scroll}px)`} bgColor={'white'} pb={60}>
         <HourWeather />
         <FutureWeather />
       </Box>
