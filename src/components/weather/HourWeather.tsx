@@ -1,12 +1,7 @@
 import { Box, Flex, Heading, HStack } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Center, Divider } from '@chakra-ui/react';
-import {
-  TiWeatherCloudy,
-  TiWeatherNight,
-  TiWeatherPartlySunny,
-  TiWeatherSunny,
-} from 'react-icons/ti';
+import { TiWeatherCloudy } from 'react-icons/ti';
 import { WiRaindrop } from 'react-icons/wi';
 import { Text } from '@chakra-ui/layout';
 import React, { FC } from 'react';
@@ -49,7 +44,13 @@ const HourWeather: FC = (): JSX.Element => {
   };
 
   return (
-    <Box mb={14}>
+    <Box
+      mb={14}
+      w={{ md: 96 }}
+      ml={{ md: '50%' }}
+      transform={{ md: 'translateX(-50%)' }}
+      px={[5, 10]}
+    >
       <Heading mb={4}>Hour</Heading>
       <HStack spacing={6} overflowX="scroll" px={2}>
         {renderHours()}
@@ -59,20 +60,3 @@ const HourWeather: FC = (): JSX.Element => {
 };
 
 export default HourWeather;
-
-{
-  /* <Flex mt={10} justifyContent="space-around">
-        <Flex flexDirection="column" justifyContent="center">
-          <Box m="auto">
-            <FiSunrise size={25} />
-          </Box>
-          <Heading size="xl">6:23</Heading>
-        </Flex>
-        <Flex flexDirection="column" justifyContent="center">
-          <Box m="auto">
-            <FiSunset size={25} />
-          </Box>
-          <Heading size="xl">19:57</Heading>
-        </Flex>
-      </Flex> */
-}

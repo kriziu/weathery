@@ -9,19 +9,27 @@ import {
 } from 'react-icons/ti';
 import { Tag } from '@chakra-ui/tag';
 import { FC } from 'react';
+import DetailWeather from './DetailWeather';
 
 const FutureWeather: FC = (): JSX.Element => {
   return (
-    <Box >
-      <Flex justifyContent="space-between" alignItems="center" mb={4}>
-        <Heading>Today</Heading>
+    <Box px={[5, 10]}>
+      <Flex
+        justifyContent={['space-between', 'space-between', 'center']}
+        alignItems="center"
+        mb={4}
+      >
+        <Heading mr={{ md: 56 }}>Today</Heading>
         <Tag cursor="pointer" p={2} fontSize="md">
           See all
         </Tag>
       </Flex>
 
-      <Flex justifyContent="space-between" alignItems="center">
-        <Flex flexDirection="column" alignItems="center">
+      <Flex
+        justifyContent={['space-between', 'space-around', 'center']}
+        alignItems="center"
+      >
+        <Flex flexDirection="column" alignItems="center" mr={{ md: 10 }}>
           <TiWeatherCloudy size={50} />
           <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
@@ -29,7 +37,7 @@ const FutureWeather: FC = (): JSX.Element => {
             <StatLabel>Morning</StatLabel>
           </Stat>
         </Flex>
-        <Flex flexDirection="column" alignItems="center">
+        <Flex flexDirection="column" alignItems="center" mr={{ md: 10 }}>
           <TiWeatherPartlySunny size={50} />
           <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
@@ -37,7 +45,7 @@ const FutureWeather: FC = (): JSX.Element => {
             <StatLabel>Afternoon</StatLabel>
           </Stat>
         </Flex>
-        <Flex flexDirection="column" alignItems="center">
+        <Flex flexDirection="column" alignItems="center" mr={{ md: 10 }}>
           <TiWeatherSunny size={50} />
           <Divider borderColor="black" opacity={0.1} my={2} />
           <Stat textAlign="center">
@@ -59,20 +67,3 @@ const FutureWeather: FC = (): JSX.Element => {
 };
 
 export default FutureWeather;
-
-{
-  /* <Flex mt={10} justifyContent="space-around">
-        <Flex flexDirection="column" justifyContent="center">
-          <Box m="auto">
-            <FiSunrise size={25} />
-          </Box>
-          <Heading size="xl">6:23</Heading>
-        </Flex>
-        <Flex flexDirection="column" justifyContent="center">
-          <Box m="auto">
-            <FiSunset size={25} />
-          </Box>
-          <Heading size="xl">19:57</Heading>
-        </Flex>
-      </Flex> */
-}
