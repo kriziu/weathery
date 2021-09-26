@@ -1,19 +1,19 @@
-import { FC, useEffect, useState } from 'react';
+import { createContext, FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { Box, Heading } from '@chakra-ui/layout';
 import { Slide } from '@chakra-ui/transition';
 import Geocode from 'react-geocode';
+import { ParallaxProvider } from 'react-scroll-parallax';
+import useResizeObserver from 'use-resize-observer';
 
 import InputLocation from './InputLocation';
 import MapGoogle from './MapGoogle';
-import { getForecast } from '../api/forecast';
+import { getForecast, ResponseDataType } from '../api/forecast';
 import CurrentWeather from './weather/CurrentWeather';
 import FutureWeather from './weather/FutureWeather';
 import styled from '@emotion/styled';
 import HourWeather from './weather/HourWeather';
-import { ParallaxProvider } from 'react-scroll-parallax';
-import { borderRadius } from '../constants/styles';
 
 interface GeocodeResponseType {
   results: {
@@ -31,10 +31,17 @@ export const StyledSVG = styled.svg`
   transform: translateY(1px); // small fix on mobiles
 `;
 
+const degree: 'C' | 'F' = 'C';
+
+export const DegreeContext = createContext(degree);
+
 const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
   const [changingLocation, setChangingLocation] = useState(false);
+  const [forecast, setForecast] = useState<ResponseDataType>();
+
+  const { ref, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
 
   const changeLocation = (): void => {
     Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
@@ -82,7 +89,9 @@ const App: FC = (): JSX.Element => {
   useEffect(() => {
     if (coords.lat === 0 && coords.lng === 0) return;
     changeLocation();
-    getForecast(coords);
+    getForecast(coords).then(res => {
+      setForecast(res);
+    });
     setChangingLocation(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,63 +100,77 @@ const App: FC = (): JSX.Element => {
   return (
     <ParallaxProvider>
       <ChakraProvider>
-        <Slide in={changingLocation} direction="top" style={{ zIndex: 1000 }}>
-          <Box bgColor="white" w="full" height="full" px={5} pb={40}>
-            <Heading
-              size="xl"
-              textAlign="center"
-              pt={5}
-              onClick={() => setChangingLocation(!changingLocation)}
-            >
-              {location}
-            </Heading>
-            <InputLocation setCoords={setCoords} />
-            <Box p={[5, 10]} height="sm">
-              <MapGoogle coords={coords} setCoords={setCoords} />
-            </Box>{' '}
-          </Box>
-        </Slide>
+        <DegreeContext.Provider value={degree}>
+          <Slide in={changingLocation} direction="top" style={{ zIndex: 1000 }}>
+            <Box bgColor="white" w="full" height="full" px={5} pb={40}>
+              <Heading
+                size="xl"
+                textAlign="center"
+                pt={5}
+                onClick={() => setChangingLocation(!changingLocation)}
+              >
+                {location}
+              </Heading>
+              <InputLocation setCoords={setCoords} />
+              <Box p={[5, 10]} height="sm">
+                <MapGoogle coords={coords} setCoords={setCoords} />
+              </Box>{' '}
+            </Box>
+          </Slide>
 
-        <Box
-          bgGradient="linear(to-tr, yellow.300, orange.400)"
-          position="fixed"
-          width="full"
-          top={0}
-          pb={60}
-        >
-          <Box p={[5, 10]} position="relative" pb={0}>
-            <Heading
-              size="xl"
-              textAlign="center"
-              pt={5}
-              onClick={() => setChangingLocation(!changingLocation)}
-            >
-              {location}
-            </Heading>
-            <CurrentWeather />
+          <Box
+            bgGradient="linear(to-tr, yellow.300, orange.400)"
+            position="fixed"
+            width="full"
+            ref={ref}
+            top={0}
+            pb={300}
+          >
+            {forecast && (
+              <Box p={[5, 10]} position="relative" pb={0}>
+                <Heading
+                  size="xl"
+                  textAlign="center"
+                  pt={5}
+                  onClick={() => setChangingLocation(!changingLocation)}
+                >
+                  {location}
+                </Heading>
+                <CurrentWeather
+                  {...forecast.current}
+                  feels_like={forecast.daily[0].feels_like.day}
+                  pop={forecast.daily[0].pop}
+                />
+              </Box>
+            )}
           </Box>
-        </Box>
 
-        <Box
-          transform={[
-            'translateY(17rem)',
-            'translateY(17rem)',
-            'translateY(15rem)',
-            'translateY(13rem)',
-          ]}
-        >
-          <StyledSVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-            <path
-              fill="#fff"
-              fillOpacity="1"
-              d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-            ></path>
-          </StyledSVG>
-          <Box bgColor={'white'}>
-            <HourWeather />
-            <FutureWeather />
+          <Box
+            transform={[
+              `translateY(${height}px)`,
+              `translateY(${height - 80}px)`,
+              `translateY(${height - 120}px)`,
+            ]}
+            onClick={() => setChangingLocation(false)}
+          >
+            <StyledSVG
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1440 320"
+            >
+              <path
+                fill="#fff"
+                fillOpacity="1"
+                d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              ></path>
+            </StyledSVG>
+            {forecast && (
+              <Box bgColor={'white'}>
+                <HourWeather {...forecast.hourly} />
+                <FutureWeather {...forecast.daily} />
+              </Box>
+            )}
           </Box>
-        </Box>
+        </DegreeContext.Provider>
       </ChakraProvider>
     </ParallaxProvider>
   );

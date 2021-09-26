@@ -1,70 +1,68 @@
-import { Box, Flex, Heading } from '@chakra-ui/layout';
+import { FC, useContext, Fragment } from 'react';
+
+import { Box, Flex } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
-import {
-  TiWeatherCloudy,
-  TiWeatherNight,
-  TiWeatherPartlySunny,
-  TiWeatherSunny,
-} from 'react-icons/ti';
-import { Tag } from '@chakra-ui/tag';
-import { FC } from 'react';
-import DetailWeather from './DetailWeather';
 
-const FutureWeather: FC = (): JSX.Element => {
+import DetailWeather from './DetailWeather';
+import { tempConverter } from '../../utils/tempConverter';
+import { DegreeContext } from '../App';
+import { FutureWeatherType } from '../../api/forecast';
+import { icons } from '../../utils/icons';
+import WeatherContainer from './WeatherContainer';
+
+const namesOfDays = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wendesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
+  const degree = useContext(DegreeContext);
+  const days = Object.values(props);
+
+  const renderDays = (): JSX.Element[] => {
+    return days.map((day, index) => {
+      const date = new Date(day.dt * 1000);
+
+      return (
+        <Fragment key={index}>
+          <Flex flexDirection="column" alignItems="center" pb={4}>
+            <Box w={12} h={12}>
+              {icons[day.weather[0].icon]}
+            </Box>
+
+            <Divider borderColor="black" opacity={0.1} my={2} />
+            <Stat textAlign="center">
+              <StatNumber>{tempConverter(degree, day.temp.day)}°</StatNumber>
+              <StatLabel>
+                {index === 0 ? 'Today' : namesOfDays[date.getDay()]}
+              </StatLabel>
+            </Stat>
+          </Flex>
+          {index !== days.length - 1 && (
+            <Divider
+              orientation="vertical"
+              height={20}
+              borderColor="black"
+              opacity={0.1}
+            />
+          )}
+        </Fragment>
+      );
+    });
+  };
+
   return (
     <>
-      <Box px={[5, 10]}>
-        <Flex
-          justifyContent={['space-between', 'space-between', 'center']}
-          alignItems="center"
-          mb={4}
-        >
-          <Heading mr={{ md: 64 }}>Today</Heading>
-          <Tag cursor="pointer" p={2} fontSize="md">
-            See all
-          </Tag>
-        </Flex>
-
-        <Flex
-          justifyContent={['space-between', 'space-around', 'center']}
-          alignItems="center"
-        >
-          <Flex flexDirection="column" alignItems="center" mr={{ md: 10 }}>
-            <TiWeatherCloudy size={50} />
-            <Divider borderColor="black" opacity={0.1} my={2} />
-            <Stat textAlign="center">
-              <StatNumber>24°</StatNumber>
-              <StatLabel>Morning</StatLabel>
-            </Stat>
-          </Flex>
-          <Flex flexDirection="column" alignItems="center" mr={{ md: 10 }}>
-            <TiWeatherPartlySunny size={50} />
-            <Divider borderColor="black" opacity={0.1} my={2} />
-            <Stat textAlign="center">
-              <StatNumber>30°</StatNumber>
-              <StatLabel>Afternoon</StatLabel>
-            </Stat>
-          </Flex>
-          <Flex flexDirection="column" alignItems="center" mr={{ md: 10 }}>
-            <TiWeatherSunny size={50} />
-            <Divider borderColor="black" opacity={0.1} my={2} />
-            <Stat textAlign="center">
-              <StatNumber>27°</StatNumber>
-              <StatLabel>Evening</StatLabel>
-            </Stat>
-          </Flex>
-          <Flex flexDirection="column" alignItems="center">
-            <TiWeatherNight size={50} />
-            <Divider borderColor="black" opacity={0.1} my={2} />
-            <Stat textAlign="center">
-              <StatNumber>25°</StatNumber>
-              <StatLabel>Night</StatLabel>
-            </Stat>
-          </Flex>
-        </Flex>
-      </Box>
-      <DetailWeather />
+      <WeatherContainer title="Forecast" margin={-6}>
+        {renderDays()}
+      </WeatherContainer>
+      <DetailWeather {...days[0]} />
     </>
   );
 };

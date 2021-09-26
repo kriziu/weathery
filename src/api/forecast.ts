@@ -1,9 +1,9 @@
-import axios, { AxiosPromise } from 'axios';
-import { tempConverter } from '../utils/tempConverter';
+import axios from 'axios';
+import { icons } from '../utils/icons';
 
 interface Description {
   description: string;
-  icon: string;
+  icon: keyof typeof icons;
   id: number;
   main: string;
 }
@@ -48,10 +48,12 @@ export interface FutureWeatherType extends SmallWeatherType {
     eve: number;
     morn: number;
     night: number;
+    max: number;
+    min: number;
   };
 }
 
-export interface HourlyWeatherType {
+export interface HourlyWeatherType extends SmallWeatherType {
   feels_like: number;
   pop: number;
   temp: number;
@@ -60,8 +62,8 @@ export interface HourlyWeatherType {
 
 export interface ResponseDataType {
   current: WeatherType;
-  daily: FutureWeatherType;
-  hourly: HourlyWeatherType;
+  daily: FutureWeatherType[];
+  hourly: HourlyWeatherType[];
 }
 
 export const getForecast = async (coords: {

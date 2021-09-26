@@ -1,62 +1,57 @@
-import { Box, Flex, Heading, HStack } from '@chakra-ui/layout';
+import { FC, useContext, Fragment } from 'react';
+
+import { Flex } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Center, Divider } from '@chakra-ui/react';
-import { TiWeatherCloudy } from 'react-icons/ti';
 import { WiRaindrop } from 'react-icons/wi';
 import { Text } from '@chakra-ui/layout';
-import React, { FC } from 'react';
 
-const HourWeather: FC = (): JSX.Element => {
+import { HourlyWeatherType } from '../../api/forecast';
+import { tempConverter } from '../../utils/tempConverter';
+import { DegreeContext } from '../App';
+import { icons } from '../../utils/icons';
+import WeatherContainer from './WeatherContainer';
+
+const HourWeather: FC<HourlyWeatherType[]> = (props): JSX.Element => {
+  const degree = useContext(DegreeContext);
+
   const renderHours = (): JSX.Element[] => {
-    const arr = [];
+    const hours = Object.values(props);
 
-    for (let i = 1; i < 24; i++) {
-      arr.push(i);
-    }
+    return hours.map((hour, index) => {
+      const date = new Date(hour.dt * 1000);
 
-    return arr.map((i, index) => (
-      <React.Fragment key={index}>
-        <Stat textAlign="center">
-          <StatLabel fontSize="lg">{i}:00 </StatLabel>
-          <Center>
-            <TiWeatherCloudy size={40} />
-          </Center>
-          <StatNumber>21°</StatNumber>
-          <StatHelpText ml={-4}>
-            <Center>
-              <Flex alignItems="center">
-                <WiRaindrop size={40} />
-                <Text ml={-2}>30%</Text>
-              </Flex>
+      return (
+        <Fragment key={index}>
+          <Stat textAlign="center">
+            <StatLabel fontSize="lg">{date.getHours()}:00</StatLabel>
+            <Center w={12} h={12}>
+              {icons[hour.weather[0].icon]}
             </Center>
-          </StatHelpText>
-        </Stat>
-        {index !== arr.length - 1 && (
-          <Divider
-            orientation="vertical"
-            height={20}
-            borderColor="black"
-            opacity={0.1}
-          />
-        )}
-      </React.Fragment>
-    ));
+            <StatNumber>{tempConverter(degree, hour.temp)}°</StatNumber>
+            <StatHelpText ml={-4}>
+              <Center>
+                <Flex alignItems="center">
+                  <WiRaindrop size={40} />
+                  <Text ml={-2}>{(hour.pop * 100).toFixed(0)}%</Text>
+                </Flex>
+              </Center>
+            </StatHelpText>
+          </Stat>
+          {index !== hours.length - 1 && (
+            <Divider
+              orientation="vertical"
+              height={20}
+              borderColor="black"
+              opacity={0.1}
+            />
+          )}
+        </Fragment>
+      );
+    });
   };
 
-  return (
-    <Box
-      mb={14}
-      w={{ md: 500 }}
-      ml={{ md: '50%' }}
-      transform={{ md: 'translateX(-50%)' }}
-      px={[5, 10]}
-    >
-      <Heading mb={4}>Hour</Heading>
-      <HStack spacing={6} overflowX="scroll" px={2}>
-        {renderHours()}
-      </HStack>
-    </Box>
-  );
+  return <WeatherContainer title="Hour">{renderHours()}</WeatherContainer>;
 };
 
 export default HourWeather;

@@ -1,9 +1,6 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
-import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Box } from '@chakra-ui/layout';
-import { Switch } from '@chakra-ui/switch';
-import { Collapse } from '@chakra-ui/transition';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 
 import { borderRadius } from '../constants/styles';
