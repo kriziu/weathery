@@ -133,19 +133,6 @@ const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
               </StatNumber>
             </Stat>
           </Flex>
-          <Center>
-            <Divider borderColor="black" opacity={0.1} w={64} py={2} />
-          </Center>
-          <Flex px={['10vw', '20vw', '30vw', 0]} mt={2}>
-            <Stat textAlign="center">
-              <StatLabel>Max</StatLabel>
-              <StatNumber>{tempConverter(degree, props.temp.max)}°</StatNumber>
-            </Stat>
-            <Stat textAlign="center">
-              <StatLabel>Min</StatLabel>
-              <StatNumber>{tempConverter(degree, props.temp.min)}°</StatNumber>
-            </Stat>
-          </Flex>
 
           <Stat textAlign="center">
             <StatLabel>

@@ -1,8 +1,10 @@
-import { createContext, FC, useEffect, useState } from 'react';
+import { createContext, FC, useEffect, useRef, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { Box, Heading } from '@chakra-ui/layout';
-import { Slide } from '@chakra-ui/transition';
+import { Box, Center, Heading } from '@chakra-ui/layout';
+import { Fade, Slide } from '@chakra-ui/transition';
+import { Portal } from '@chakra-ui/portal';
+import { Spinner } from '@chakra-ui/spinner';
 import Geocode from 'react-geocode';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import useResizeObserver from 'use-resize-observer';
@@ -38,10 +40,11 @@ export const DegreeContext = createContext(degree);
 const App: FC = (): JSX.Element => {
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
-  const [changingLocation, setChangingLocation] = useState(false);
+  const [changingLocation, setChangingLocation] = useState(true);
   const [forecast, setForecast] = useState<ResponseDataType>();
+  const [loading, setLoading] = useState(false);
 
-  const { ref, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
+  const { ref, height = 1 } = useResizeObserver<HTMLDivElement>();
 
   const changeLocation = (): void => {
     Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
@@ -88,9 +91,14 @@ const App: FC = (): JSX.Element => {
 
   useEffect(() => {
     if (coords.lat === 0 && coords.lng === 0) return;
+
     changeLocation();
+    setLoading(true);
+    console.log('loading true');
     getForecast(coords).then(res => {
       setForecast(res);
+      setLoading(false);
+      console.log('loading false');
     });
     setChangingLocation(false);
 
@@ -101,7 +109,7 @@ const App: FC = (): JSX.Element => {
     <ParallaxProvider>
       <ChakraProvider>
         <DegreeContext.Provider value={degree}>
-          <Slide in={changingLocation} direction="top" style={{ zIndex: 1000 }}>
+          <Slide in={changingLocation} direction="top" style={{ zIndex: 5 }}>
             <Box bgColor="white" w="full" height="full" px={5} pb={40}>
               <Heading
                 size="xl"
@@ -124,15 +132,15 @@ const App: FC = (): JSX.Element => {
             width="full"
             ref={ref}
             top={0}
-            pb={300}
+            pb={[100, 200, 300, 400]}
           >
-            {forecast && (
+            {forecast ? (
               <Box p={[5, 10]} position="relative" pb={0}>
                 <Heading
                   size="xl"
                   textAlign="center"
                   pt={5}
-                  onClick={() => setChangingLocation(!changingLocation)}
+                  onClick={() => setChangingLocation(true)}
                 >
                   {location}
                 </Heading>
@@ -142,6 +150,27 @@ const App: FC = (): JSX.Element => {
                   pop={forecast.daily[0].pop}
                 />
               </Box>
+            ) : (
+              <>
+                <Heading
+                  textAlign="center"
+                  mt={32}
+                  onClick={() => setChangingLocation(!changingLocation)}
+                >
+                  Click to select location
+                </Heading>
+                <StyledSVG
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1440 320"
+                  style={{ position: 'absolute', bottom: 0 }}
+                >
+                  <path
+                    fill="#fff"
+                    fillOpacity="1"
+                    d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                  ></path>
+                </StyledSVG>
+              </>
             )}
           </Box>
 
@@ -153,23 +182,39 @@ const App: FC = (): JSX.Element => {
             ]}
             onClick={() => setChangingLocation(false)}
           >
-            <StyledSVG
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 1440 320"
-            >
-              <path
-                fill="#fff"
-                fillOpacity="1"
-                d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-              ></path>
-            </StyledSVG>
             {forecast && (
-              <Box bgColor={'white'}>
-                <HourWeather {...forecast.hourly} />
-                <FutureWeather {...forecast.daily} />
-              </Box>
+              <>
+                <StyledSVG
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1440 320"
+                >
+                  <path
+                    fill="#fff"
+                    fillOpacity="1"
+                    d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                  ></path>
+                </StyledSVG>
+                <Box bgColor={'white'}>
+                  <HourWeather {...forecast.hourly} />
+                  <FutureWeather {...forecast.daily} />
+                </Box>
+              </>
             )}
           </Box>
+
+          <Portal>
+            <Fade in={loading}>
+              <Center
+                w="100vw"
+                h="100vh"
+                bgColor="blackAlpha.700"
+                zIndex={4}
+                position="fixed"
+              >
+                <Spinner color="white" size="xl" />
+              </Center>
+            </Fade>
+          </Portal>
         </DegreeContext.Provider>
       </ChakraProvider>
     </ParallaxProvider>
