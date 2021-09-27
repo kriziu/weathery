@@ -74,7 +74,7 @@ const App: FC = (): JSX.Element => {
                 state = addressComponent.long_name + ',';
                 break;
               case 'country':
-                country = addressComponent.long_name + ',';
+                country = addressComponent.long_name;
                 break;
             }
           });
@@ -93,10 +93,8 @@ const App: FC = (): JSX.Element => {
 
     changeLocation();
     setLoading(true);
-    console.log('loading true');
     getForecast(coords).then(res => {
       setForecast(res);
-      console.log('loading false');
       setLoading(false);
     });
     setChangingLocation(false);
@@ -115,7 +113,10 @@ const App: FC = (): JSX.Element => {
                 textAlign="center"
                 pt={5}
                 cursor="pointer"
-                onClick={() => location !== 'No location selected' && setChangingLocation(false)}
+                onClick={() =>
+                  location !== 'No location selected' &&
+                  setChangingLocation(false)
+                }
               >
                 {location}
               </Heading>
@@ -134,9 +135,10 @@ const App: FC = (): JSX.Element => {
             top={0}
             pb={[100, 200, 300, 400]}
           >
-            {loading ? <Box p={12}>
-              <Loader /> 
-              <StyledSVG
+            {loading ? (
+              <Box p={12} px={[12, 12, 200, 300]}>
+                <Loader />
+                <StyledSVG
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 1440 320"
                   style={{ position: 'absolute', bottom: 0 }}
@@ -146,52 +148,63 @@ const App: FC = (): JSX.Element => {
                     fillOpacity="1"
                     d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
                   ></path>
-              </StyledSVG>
-            </Box> : forecast && (
-              <Box p={[5, 10]} position="relative" pb={0}>
-                <Heading
-                  size="xl"
-                  textAlign="center"
-                  pt={5}
-                  cursor="pointer"
-                  onClick={() => setChangingLocation(true)}
-                >
-                  {location}
-                </Heading>
-                <CurrentWeather
-                  {...forecast.current}
-                  feels_like={forecast.daily[0].feels_like.day}
-                  pop={forecast.daily[0].pop}
-                />
+                </StyledSVG>
               </Box>
+            ) : (
+              forecast && (
+                <Box p={[5, 10]} position="relative" pb={0}>
+                  <Heading
+                    size="xl"
+                    textAlign="center"
+                    pt={5}
+                    cursor="pointer"
+                    onClick={() => setChangingLocation(true)}
+                  >
+                    {location}
+                  </Heading>
+                  <CurrentWeather
+                    {...forecast.current}
+                    feels_like={forecast.daily[0].feels_like.day}
+                    pop={forecast.daily[0].pop}
+                  />
+                </Box>
+              )
             )}
-</Box>
+          </Box>
           <Box
             transform={[
               `translateY(${height}px)`,
               `translateY(${height - 80}px)`,
               `translateY(${height - 120}px)`,
             ]}
-            onClick={() => location !== 'No location selected' && setChangingLocation(false)}
+            onClick={() =>
+              location !== 'No location selected' && setChangingLocation(false)
+            }
           >
-            {loading ? <Box p={12} mt={48}><Loader/></Box> : forecast && (
-              <>
-                <StyledSVG
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1440 320"
-                >
-                  <path
-                    fill="#fff"
-                    fillOpacity="1"
-                    d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                  ></path>
-                </StyledSVG>
-                <Box bgColor={'white'}>
-                  <HourWeather {...forecast.hourly} />
-                  <FutureWeather {...forecast.daily} />
-                </Box>
-              </>
-            ) }
+            {loading ? (
+              <Box p={[12, 12, 200, 300]} mt={[48, 300, 250, 350]}>
+                <Loader />
+              </Box>
+            ) : (
+              forecast && (
+                <>
+                  <StyledSVG
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1440 320"
+                  >
+                    <path
+                      fill="#fff"
+                      fillOpacity="1"
+                      d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                    ></path>
+                  </StyledSVG>
+                  <Box bgColor={'white'}>
+                    <HourWeather {...forecast.hourly} />
+                    <FutureWeather {...forecast.daily} />
+                  </Box>
+                </>
+              )
+            )}
           </Box>
         </DegreeContext.Provider>
       </ChakraProvider>

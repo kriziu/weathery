@@ -1,4 +1,4 @@
-import { FC, useContext, Fragment } from 'react';
+import { FC, useContext, Fragment, useState } from 'react';
 
 import { Box, Flex } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
@@ -10,6 +10,7 @@ import { DegreeContext } from '../App';
 import { FutureWeatherType } from '../../api/forecast';
 import { icons } from '../../utils/icons';
 import WeatherContainer from './WeatherContainer';
+import { borderRadius } from '../../constants/styles';
 
 const namesOfDays = [
   'Sunday',
@@ -25,13 +26,24 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
   const degree = useContext(DegreeContext);
   const days = Object.values(props);
 
+  const [selectedDay, setSelectedDay] = useState(0);
+
   const renderDays = (): JSX.Element[] => {
     return days.map((day, index) => {
       const date = new Date(day.dt * 1000);
 
       return (
         <Fragment key={index}>
-          <Flex flexDirection="column" alignItems="center" pb={4}>
+          <Flex
+            flexDirection="column"
+            alignItems="center"
+            p={4}
+            bgColor={index === selectedDay ? 'gray.100' : 'transparent'}
+            borderRadius={borderRadius}
+            cursor="pointer"
+            onClick={() => setSelectedDay(index)}
+            transition="all .2s"
+          >
             <Box w={12} h={12}>
               {icons[day.weather[0].icon]}
             </Box>
@@ -62,7 +74,7 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
       <WeatherContainer title="Forecast" margin={-6}>
         {renderDays()}
       </WeatherContainer>
-      <DetailWeather {...days[0]} />
+      <DetailWeather {...days[selectedDay]} />
     </>
   );
 };

@@ -37,7 +37,7 @@ const CurrentWeather: FC<CurrentWeatherType> = (props): JSX.Element => {
       <Flex mt={5} w={[200, 200, 300]} ml="50%" transform="translateX(-50%)">
         <Stat textAlign="center">
           <StatLabel>Precipitation</StatLabel>
-          <StatNumber>{props.pop}%</StatNumber>
+          <StatNumber>{props.pop * 100}%</StatNumber>
         </Stat>
         <Stat textAlign="center">
           <StatLabel>Wind</StatLabel>

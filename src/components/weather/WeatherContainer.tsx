@@ -18,7 +18,7 @@ const WeatherContainer: FC<{ title: string; margin?: number }> = ({
       zIndex={1}
     >
       <Heading mb={4}>{title}</Heading>
-      <HStack spacing={6} overflowX="scroll" px={2}>
+      <HStack spacing={6} overflowX="scroll" px={2} pb={4}>
         {children}
       </HStack>
     </Box>
