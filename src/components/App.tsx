@@ -1,10 +1,8 @@
-import { createContext, FC, useEffect, useRef, useState } from 'react';
+import { createContext, FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { Box, Center, Heading } from '@chakra-ui/layout';
-import { Fade, Slide } from '@chakra-ui/transition';
-import { Portal } from '@chakra-ui/portal';
-import { Spinner } from '@chakra-ui/spinner';
+import { Box, Heading } from '@chakra-ui/layout';
+import { Slide } from '@chakra-ui/transition';
 import Geocode from 'react-geocode';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import useResizeObserver from 'use-resize-observer';
@@ -16,6 +14,7 @@ import CurrentWeather from './weather/CurrentWeather';
 import FutureWeather from './weather/FutureWeather';
 import styled from '@emotion/styled';
 import HourWeather from './weather/HourWeather';
+import Loader from './Loader';
 
 interface GeocodeResponseType {
   results: {
@@ -97,8 +96,8 @@ const App: FC = (): JSX.Element => {
     console.log('loading true');
     getForecast(coords).then(res => {
       setForecast(res);
-      setLoading(false);
       console.log('loading false');
+      setLoading(false);
     });
     setChangingLocation(false);
 
@@ -115,7 +114,8 @@ const App: FC = (): JSX.Element => {
                 size="xl"
                 textAlign="center"
                 pt={5}
-                onClick={() => setChangingLocation(!changingLocation)}
+                cursor="pointer"
+                onClick={() => location !== 'No location selected' && setChangingLocation(false)}
               >
                 {location}
               </Heading>
@@ -134,12 +134,26 @@ const App: FC = (): JSX.Element => {
             top={0}
             pb={[100, 200, 300, 400]}
           >
-            {forecast ? (
+            {loading ? <Box p={12}>
+              <Loader /> 
+              <StyledSVG
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1440 320"
+                  style={{ position: 'absolute', bottom: 0 }}
+                >
+                  <path
+                    fill="#fff"
+                    fillOpacity="1"
+                    d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                  ></path>
+              </StyledSVG>
+            </Box> : forecast && (
               <Box p={[5, 10]} position="relative" pb={0}>
                 <Heading
                   size="xl"
                   textAlign="center"
                   pt={5}
+                  cursor="pointer"
                   onClick={() => setChangingLocation(true)}
                 >
                   {location}
@@ -150,39 +164,17 @@ const App: FC = (): JSX.Element => {
                   pop={forecast.daily[0].pop}
                 />
               </Box>
-            ) : (
-              <>
-                <Heading
-                  textAlign="center"
-                  mt={32}
-                  onClick={() => setChangingLocation(!changingLocation)}
-                >
-                  Click to select location
-                </Heading>
-                <StyledSVG
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1440 320"
-                  style={{ position: 'absolute', bottom: 0 }}
-                >
-                  <path
-                    fill="#fff"
-                    fillOpacity="1"
-                    d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                  ></path>
-                </StyledSVG>
-              </>
             )}
-          </Box>
-
+</Box>
           <Box
             transform={[
               `translateY(${height}px)`,
               `translateY(${height - 80}px)`,
               `translateY(${height - 120}px)`,
             ]}
-            onClick={() => setChangingLocation(false)}
+            onClick={() => location !== 'No location selected' && setChangingLocation(false)}
           >
-            {forecast && (
+            {loading ? <Box p={12} mt={48}><Loader/></Box> : forecast && (
               <>
                 <StyledSVG
                   xmlns="http://www.w3.org/2000/svg"
@@ -199,22 +191,8 @@ const App: FC = (): JSX.Element => {
                   <FutureWeather {...forecast.daily} />
                 </Box>
               </>
-            )}
+            ) }
           </Box>
-
-          <Portal>
-            <Fade in={loading}>
-              <Center
-                w="100vw"
-                h="100vh"
-                bgColor="blackAlpha.700"
-                zIndex={4}
-                position="fixed"
-              >
-                <Spinner color="white" size="xl" />
-              </Center>
-            </Fade>
-          </Portal>
         </DegreeContext.Provider>
       </ChakraProvider>
     </ParallaxProvider>
