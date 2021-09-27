@@ -11,6 +11,7 @@ import { Parallax } from 'react-scroll-parallax';
 import { FutureWeatherType } from '../../api/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
+import { gradients } from '../../utils/gradients';
 
 const StyledSVG = styled.svg`
   display: block;
@@ -27,7 +28,7 @@ const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
 
   return (
     <Parallax y={[20, -10]}>
-      <Box bgGradient="linear(to-b, yellow.300, orange.400)" pb={10}>
+      <Box bgGradient={gradients[props.weather[0].icon]} pb={10}>
         <StyledSVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path
             fill="#fff"
@@ -88,7 +89,7 @@ const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
             </Stat>
             <Stat textAlign="center">
               <StatLabel>Rain</StatLabel>
-              <StatNumber>{props.pop * 100}%</StatNumber>
+              <StatNumber>{(props.pop * 100).toFixed()}%</StatNumber>
             </Stat>
             <Stat textAlign="center">
               <StatLabel>Clouds</StatLabel>

@@ -1,8 +1,9 @@
 import { createContext, FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
-import { Box, Heading } from '@chakra-ui/layout';
-import { Slide } from '@chakra-ui/transition';
+import { Box, Center, Heading } from '@chakra-ui/layout';
+import { Fade, Slide } from '@chakra-ui/transition';
+import { Spinner } from '@chakra-ui/spinner';
 import Geocode from 'react-geocode';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import useResizeObserver from 'use-resize-observer';
@@ -14,7 +15,7 @@ import CurrentWeather from './weather/CurrentWeather';
 import FutureWeather from './weather/FutureWeather';
 import styled from '@emotion/styled';
 import HourWeather from './weather/HourWeather';
-import Loader from './Loader';
+import { gradients } from '../utils/gradients';
 
 interface GeocodeResponseType {
   results: {
@@ -123,71 +124,63 @@ const App: FC = (): JSX.Element => {
               <InputLocation setCoords={setCoords} />
               <Box p={[5, 10]} height="sm">
                 <MapGoogle coords={coords} setCoords={setCoords} />
-              </Box>{' '}
+              </Box>
             </Box>
           </Slide>
 
-          <Box
-            bgGradient="linear(to-tr, yellow.300, orange.400)"
-            position="fixed"
-            width="full"
-            ref={ref}
-            top={0}
-            pb={[100, 200, 300, 400]}
-          >
-            {loading ? (
-              <Box p={12} px={[12, 12, 200, 300]}>
-                <Loader />
-                <StyledSVG
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 1440 320"
-                  style={{ position: 'absolute', bottom: 0 }}
+          {loading ? (
+            <Center h="100vh" w="100vw">
+              <Spinner size="xl" />
+            </Center>
+          ) : (
+            forecast && (
+              <Fade in={!loading} unmountOnExit>
+                <Box
+                  bgGradient={
+                    forecast
+                      ? gradients[forecast.current.weather[0].icon]
+                      : gradients['03d']
+                  }
+                  position="fixed"
+                  width="full"
+                  ref={ref}
+                  top={0}
+                  color={
+                    forecast && forecast.current.weather[0].icon[2] === 'n'
+                      ? 'gray.500'
+                      : ''
+                  }
+                  pb={[100, 200, 300, 400]}
                 >
-                  <path
-                    fill="#fff"
-                    fillOpacity="1"
-                    d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                  ></path>
-                </StyledSVG>
-              </Box>
-            ) : (
-              forecast && (
-                <Box p={[5, 10]} position="relative" pb={0}>
-                  <Heading
-                    size="xl"
-                    textAlign="center"
-                    pt={5}
-                    cursor="pointer"
-                    onClick={() => setChangingLocation(true)}
-                  >
-                    {location}
-                  </Heading>
-                  <CurrentWeather
-                    {...forecast.current}
-                    feels_like={forecast.daily[0].feels_like.day}
-                    pop={forecast.daily[0].pop}
-                  />
+                  <Box p={[5, 10]} position="relative" pb={0}>
+                    <Heading
+                      size="xl"
+                      textAlign="center"
+                      pt={5}
+                      cursor="pointer"
+                      onClick={() => setChangingLocation(true)}
+                    >
+                      {location}
+                    </Heading>
+                    <CurrentWeather
+                      {...forecast.current}
+                      feels_like={forecast.daily[0].feels_like.day}
+                      pop={forecast.daily[0].pop}
+                    />
+                  </Box>
                 </Box>
-              )
-            )}
-          </Box>
-          <Box
-            transform={[
-              `translateY(${height}px)`,
-              `translateY(${height - 80}px)`,
-              `translateY(${height - 120}px)`,
-            ]}
-            onClick={() =>
-              location !== 'No location selected' && setChangingLocation(false)
-            }
-          >
-            {loading ? (
-              <Box p={[12, 12, 200, 300]} mt={[48, 300, 250, 350]}>
-                <Loader />
-              </Box>
-            ) : (
-              forecast && (
-                <>
+
+                <Box
+                  transform={[
+                    `translateY(${height}px)`,
+                    `translateY(${height - 80}px)`,
+                    `translateY(${height - 120}px)`,
+                  ]}
+                  onClick={() =>
+                    location !== 'No location selected' &&
+                    setChangingLocation(false)
+                  }
+                >
                   <StyledSVG
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 1440 320"
@@ -198,14 +191,14 @@ const App: FC = (): JSX.Element => {
                       d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,213.3C672,203,768,149,864,149.3C960,149,1056,203,1152,208C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
                     ></path>
                   </StyledSVG>
-                  <Box bgColor={'white'}>
+                  <Box bgColor="white">
                     <HourWeather {...forecast.hourly} />
                     <FutureWeather {...forecast.daily} />
                   </Box>
-                </>
-              )
-            )}
-          </Box>
+                </Box>
+              </Fade>
+            )
+          )}
         </DegreeContext.Provider>
       </ChakraProvider>
     </ParallaxProvider>
