@@ -3,6 +3,7 @@ import { FC, useContext, Fragment, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
+import { SlideFade } from '@chakra-ui/transition';
 
 import DetailWeather from './DetailWeather';
 import { tempConverter } from '../../utils/tempConverter';
@@ -16,7 +17,7 @@ const namesOfDays = [
   'Sunday',
   'Monday',
   'Tuesday',
-  'Wendesday',
+  'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
@@ -27,6 +28,16 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
   const days = Object.values(props);
 
   const [selectedDay, setSelectedDay] = useState(0);
+  const [isChanging, setIsChanging] = useState(false);
+
+  const handleSelectedDayChange = (index: number): void => {
+    setIsChanging(true);
+
+    setTimeout(() => {
+      setSelectedDay(index);
+      setIsChanging(false);
+    }, 200);
+  };
 
   const renderDays = (): JSX.Element[] => {
     return days.map((day, index) => {
@@ -41,7 +52,7 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
             bgColor={index === selectedDay ? 'gray.100' : 'transparent'}
             borderRadius={borderRadius}
             cursor="pointer"
-            onClick={() => setSelectedDay(index)}
+            onClick={() => handleSelectedDayChange(index)}
             transition="all .2s"
           >
             <Box w={12} h={12}>
@@ -74,7 +85,9 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
       <WeatherContainer title="Forecast" margin={-6}>
         {renderDays()}
       </WeatherContainer>
-      <DetailWeather {...days[selectedDay]} />
+      <SlideFade in={!isChanging}>
+        <DetailWeather {...days[selectedDay]} />
+      </SlideFade>
     </>
   );
 };

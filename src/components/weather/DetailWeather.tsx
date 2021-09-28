@@ -12,6 +12,7 @@ import { FutureWeatherType } from '../../api/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
 import { gradients } from '../../utils/gradients';
+import { TiLocationArrow } from 'react-icons/ti';
 
 const StyledSVG = styled.svg`
   display: block;
@@ -20,7 +21,7 @@ const StyledSVG = styled.svg`
 `;
 
 const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
-  const degree = useContext(DegreeContext);
+  const { degree } = useContext(DegreeContext);
   const sunrise = new Date(props.sunrise * 1000);
   const sunset = new Date(props.sunset * 1000);
   const moonrise = new Date(props.moonrise * 1000);
@@ -138,10 +139,21 @@ const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
           <Stat textAlign="center">
             <StatLabel>
               <Heading size="sm" textAlign="center" mt={5}>
-                Wind speed
+                Wind
               </Heading>
             </StatLabel>
-            <StatNumber>{props.wind_speed} m/s</StatNumber>
+            <StatNumber>
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                {props.wind_speed} m/s
+                <Box transform={`rotate(${props.wind_deg - 45}deg)`}>
+                  <TiLocationArrow size={32} />
+                </Box>
+              </Flex>
+            </StatNumber>
           </Stat>
 
           <Flex mt={5} px={['10vw', '20vw', '30vw', 0]}>

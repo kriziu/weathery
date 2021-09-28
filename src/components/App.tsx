@@ -2,20 +2,23 @@ import { createContext, FC, useEffect, useState } from 'react';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { Box, Center, Heading } from '@chakra-ui/layout';
-import { Fade, Slide } from '@chakra-ui/transition';
+import { Fade } from '@chakra-ui/transition';
 import { Spinner } from '@chakra-ui/spinner';
+import { IconButton } from '@chakra-ui/button';
+
 import Geocode from 'react-geocode';
+import styled from '@emotion/styled';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import useResizeObserver from 'use-resize-observer';
+import { IoSettingsOutline } from 'react-icons/io5';
 
-import InputLocation from './InputLocation';
-import MapGoogle from './MapGoogle';
 import { getForecast, ResponseDataType } from '../api/forecast';
 import CurrentWeather from './weather/CurrentWeather';
 import FutureWeather from './weather/FutureWeather';
-import styled from '@emotion/styled';
 import HourWeather from './weather/HourWeather';
 import { gradients } from '../utils/gradients';
+import Settings from './Settings';
+import LocationSlider from './LocationSlider';
 
 interface GeocodeResponseType {
   results: {
@@ -33,18 +36,32 @@ export const StyledSVG = styled.svg`
   transform: translateY(1px); // small fix on mobiles
 `;
 
-const degree: 'C' | 'F' = 'C';
+// TODO:
+// PRZENIESC DO DWOCH OSOBNYCH KOMPONENTOW
+// GOOGLE MAPS I USLUGI PRZENIESC DO FOLDERU (STWORZYC NOWY)
+// DARK MODE I FAHRENHEIT
+// MAYBE NA KOMPY WYGLAD
 
-export const DegreeContext = createContext(degree);
+export const DegreeContext = createContext<{
+  degree: 'C' | 'F';
+  setDegree: React.Dispatch<React.SetStateAction<'C' | 'F'>>;
+}>({
+  degree: 'C',
+  setDegree: () => {},
+});
 
 const App: FC = (): JSX.Element => {
+  const [degree, setDegree] = useState<'C' | 'F'>('C');
+  const contextValue = { degree, setDegree };
+
   const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
   const [changingLocation, setChangingLocation] = useState(true);
   const [forecast, setForecast] = useState<ResponseDataType>();
   const [loading, setLoading] = useState(false);
+  const [settingsShown, setSettingsShown] = useState(false);
 
-  const { ref, height = 1 } = useResizeObserver<HTMLDivElement>();
+  const { ref, height = 1 } = useResizeObserver();
 
   const changeLocation = (): void => {
     Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
@@ -106,27 +123,22 @@ const App: FC = (): JSX.Element => {
   return (
     <ParallaxProvider>
       <ChakraProvider>
-        <DegreeContext.Provider value={degree}>
-          <Slide in={changingLocation} direction="top" style={{ zIndex: 5 }}>
-            <Box bgColor="white" w="full" height="full" px={5} pb={40}>
-              <Heading
-                size="xl"
-                textAlign="center"
-                pt={5}
-                cursor="pointer"
-                onClick={() =>
-                  location !== 'No location selected' &&
-                  setChangingLocation(false)
-                }
-              >
-                {location}
-              </Heading>
-              <InputLocation setCoords={setCoords} />
-              <Box p={[5, 10]} height="sm">
-                <MapGoogle coords={coords} setCoords={setCoords} />
-              </Box>
-            </Box>
-          </Slide>
+        <DegreeContext.Provider value={contextValue}>
+          <LocationSlider
+            changingLocation={changingLocation}
+            coords={coords}
+            setCoords={setCoords}
+            location={location}
+            setChangingLocation={setChangingLocation}
+          />
+
+          {forecast && (
+            <Settings
+              forecast={forecast.current}
+              setSettingsShown={setSettingsShown}
+              settingsShown={settingsShown}
+            />
+          )}
 
           {loading ? (
             <Center h="100vh" w="100vw">
@@ -156,12 +168,24 @@ const App: FC = (): JSX.Element => {
                     <Heading
                       size="xl"
                       textAlign="center"
-                      pt={5}
                       cursor="pointer"
+                      mt={8}
                       onClick={() => setChangingLocation(true)}
                     >
                       {location}
                     </Heading>
+
+                    <IconButton
+                      position="absolute"
+                      right={[4, 6, 8, 10]}
+                      top={[4, 6, 8, 10]}
+                      zIndex={5}
+                      aria-label="settings"
+                      variant="ghost"
+                      onClick={() => setSettingsShown(!settingsShown)}
+                      icon={<IoSettingsOutline size={38} />}
+                    />
+
                     <CurrentWeather
                       {...forecast.current}
                       feels_like={forecast.daily[0].feels_like.day}
@@ -174,7 +198,7 @@ const App: FC = (): JSX.Element => {
                   transform={[
                     `translateY(${height}px)`,
                     `translateY(${height - 80}px)`,
-                    `translateY(${height - 120}px)`,
+                    `translateY(${height - 100}px)`,
                   ]}
                   onClick={() =>
                     location !== 'No location selected' &&

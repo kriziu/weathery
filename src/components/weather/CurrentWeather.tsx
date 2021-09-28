@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { Box, Flex, Heading, HStack } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
+import { TiLocationArrow } from 'react-icons/ti';
 
 import { WeatherType } from '../../api/forecast';
 import { tempConverter } from '../../utils/tempConverter';
@@ -15,7 +16,7 @@ interface CurrentWeatherType extends WeatherType {
 }
 
 const CurrentWeather: FC<CurrentWeatherType> = (props): JSX.Element => {
-  const degree = useContext(DegreeContext);
+  const { degree } = useContext(DegreeContext);
 
   return (
     <Box px={[5, 10]}>
@@ -41,7 +42,18 @@ const CurrentWeather: FC<CurrentWeatherType> = (props): JSX.Element => {
         </Stat>
         <Stat textAlign="center">
           <StatLabel>Wind</StatLabel>
-          <StatNumber>{props.wind_speed} m/s</StatNumber>
+          <StatNumber>
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+            >
+              {props.wind_speed} m/s
+              <Box transform={`rotate(${props.wind_deg - 45}deg)`}>
+                <TiLocationArrow size={32} />
+              </Box>
+            </Flex>
+          </StatNumber>
         </Stat>
       </Flex>
     </Box>
