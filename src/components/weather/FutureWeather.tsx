@@ -4,6 +4,7 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
 import { SlideFade } from '@chakra-ui/transition';
+import { useColorModeValue } from '@chakra-ui/color-mode';
 
 import DetailWeather from './DetailWeather';
 import { tempConverter } from '../../utils/tempConverter';
@@ -24,11 +25,12 @@ const namesOfDays = [
 ];
 
 const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
-  const degree = useContext(DegreeContext);
+  const { degree } = useContext(DegreeContext);
   const days = Object.values(props);
 
   const [selectedDay, setSelectedDay] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
+  const bgColor = useColorModeValue('gray.100', 'gray.700');
 
   const handleSelectedDayChange = (index: number): void => {
     setIsChanging(true);
@@ -49,7 +51,7 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
             flexDirection="column"
             alignItems="center"
             p={4}
-            bgColor={index === selectedDay ? 'gray.100' : 'transparent'}
+            bgColor={index === selectedDay ? bgColor : 'transparent'}
             borderRadius={borderRadius}
             cursor="pointer"
             onClick={() => handleSelectedDayChange(index)}

@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { icons } from '../utils/icons';
+import axios from "axios";
+import { icons } from "../utils/icons";
 
 interface Description {
   description: string;
@@ -78,7 +78,7 @@ export const getForecast = async (coords: {
       params: {
         lat,
         lon: lng,
-        appid: '8128f6d612d3981a1bcc39e4639592d3',
+        appid: "8128f6d612d3981a1bcc39e4639592d3",
       },
     }
   );

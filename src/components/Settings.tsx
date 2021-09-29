@@ -1,12 +1,17 @@
+import { FC, useContext } from 'react';
+
 import { IconButton } from '@chakra-ui/button';
 import { FormLabel } from '@chakra-ui/form-control';
 import { Box, Flex, Heading } from '@chakra-ui/layout';
 import { Switch } from '@chakra-ui/switch';
 import { Slide } from '@chakra-ui/transition';
-import { FC } from 'react';
+import { useColorMode } from '@chakra-ui/color-mode';
+
 import { IoClose } from 'react-icons/io5';
+
 import { WeatherType } from '../api/forecast';
 import { gradients } from '../utils/gradients';
+import { DegreeContext } from './App';
 
 interface SettingsProps {
   forecast: WeatherType;
@@ -19,12 +24,16 @@ const Settings: FC<SettingsProps> = ({
   setSettingsShown,
   settingsShown,
 }): JSX.Element => {
+  const { degree, setDegree } = useContext(DegreeContext);
+  const { toggleColorMode } = useColorMode();
+
   return (
     <Slide
       in={settingsShown}
       direction="right"
       style={{ zIndex: 5, display: 'flex', justifyContent: 'flex-end' }}
       onClick={() => setSettingsShown(false)}
+      unmountOnExit
     >
       <Box
         bgGradient={gradients[forecast.weather[0].icon]}
@@ -47,7 +56,11 @@ const Settings: FC<SettingsProps> = ({
         />
         <Flex alignItems="center" justifyContent="space-around" mt={24} px={6}>
           <Heading>C</Heading>
-          <Switch size="lg" aria-label="Change to Fahrenheit" />
+          <Switch
+            size="lg"
+            aria-label="Change to Fahrenheit"
+            onChange={() => setDegree(degree === 'C' ? 'F' : 'C')}
+          />
           <Heading>F</Heading>
         </Flex>
 
@@ -60,7 +73,12 @@ const Settings: FC<SettingsProps> = ({
           <FormLabel htmlFor="dark">
             <Heading size="md">Dark mode</Heading>
           </FormLabel>
-          <Switch size="lg" aria-label="Dark mode" id="dark" />
+          <Switch
+            size="lg"
+            aria-label="Dark mode"
+            id="dark"
+            onChange={toggleColorMode}
+          />
         </Flex>
       </Box>
     </Slide>

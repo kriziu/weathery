@@ -9,7 +9,8 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
-import { borderRadius, borderWidth } from '../constants/styles';
+
+import { borderRadius, borderWidth } from '../../constants/styles';
 
 interface InputLocationProps {
   setCoords: React.Dispatch<

@@ -3,16 +3,18 @@ import { FC, useContext } from 'react';
 import { Box, Center, Flex, Heading, SimpleGrid } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/color-mode';
+
 import { FiSunrise, FiSunset } from 'react-icons/fi';
-import styled from '@emotion/styled';
+import { TiLocationArrow } from 'react-icons/ti';
 import { WiMoonrise, WiMoonset } from 'react-icons/wi';
+import styled from '@emotion/styled';
 import { Parallax } from 'react-scroll-parallax';
 
 import { FutureWeatherType } from '../../api/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
 import { gradients } from '../../utils/gradients';
-import { TiLocationArrow } from 'react-icons/ti';
 
 const StyledSVG = styled.svg`
   display: block;
@@ -27,12 +29,18 @@ const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
   const moonrise = new Date(props.moonrise * 1000);
   const moonset = new Date(props.moonset * 1000);
 
+  const bgColor = useColorModeValue('#fff', '#171923');
+
   return (
-    <Parallax y={[20, -10]}>
-      <Box bgGradient={gradients[props.weather[0].icon]} pb={10}>
+    <Parallax y={[20, 0]} styleOuter={{ marginTop: '-4rem' }}>
+      <Box
+        bgGradient={gradients[props.weather[0].icon]}
+        pb={10}
+        color="gray.800"
+      >
         <StyledSVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path
-            fill="#fff"
+            fill={bgColor}
             fillOpacity="1"
             d="M0,128L48,133.3C96,139,192,149,288,144C384,139,480,117,576,106.7C672,96,768,96,864,112C960,128,1056,160,1152,170.7C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           ></path>

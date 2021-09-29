@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { Box, Flex, Heading, HStack } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Divider } from '@chakra-ui/react';
+
 import { TiLocationArrow } from 'react-icons/ti';
 
 import { WeatherType } from '../../api/forecast';

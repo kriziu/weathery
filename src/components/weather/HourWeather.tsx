@@ -3,8 +3,9 @@ import { FC, useContext, Fragment } from 'react';
 import { Flex } from '@chakra-ui/layout';
 import { Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/stat';
 import { Center, Divider } from '@chakra-ui/react';
-import { WiRaindrop } from 'react-icons/wi';
 import { Text } from '@chakra-ui/layout';
+
+import { WiRaindrop } from 'react-icons/wi';
 
 import { HourlyWeatherType } from '../../api/forecast';
 import { tempConverter } from '../../utils/tempConverter';
@@ -13,7 +14,7 @@ import { icons } from '../../utils/icons';
 import WeatherContainer from './WeatherContainer';
 
 const HourWeather: FC<HourlyWeatherType[]> = (props): JSX.Element => {
-  const degree = useContext(DegreeContext);
+  const { degree } = useContext(DegreeContext);
 
   const renderHours = (): JSX.Element[] => {
     const hours = Object.values(props);
