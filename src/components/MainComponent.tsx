@@ -58,8 +58,10 @@ const MainComponent: FC<MainComponentProps> = ({
             </Box>
           ),
         }),
-      3600000
+      2000
     );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
