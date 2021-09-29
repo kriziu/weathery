@@ -31,6 +31,7 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
   const [selectedDay, setSelectedDay] = useState(0);
   const [isChanging, setIsChanging] = useState(false);
   const bgColor = useColorModeValue('gray.100', 'gray.700');
+  const dividerColor = useColorModeValue('gray.700', 'gray.100');
 
   const handleSelectedDayChange = (index: number): void => {
     setIsChanging(true);
@@ -61,9 +62,12 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
               {icons[day.weather[0].icon]}
             </Box>
 
-            <Divider borderColor="black" opacity={0.1} my={2} />
+            <Divider borderColor={dividerColor} opacity={0.1} my={2} />
             <Stat textAlign="center">
               <StatNumber>{tempConverter(degree, day.temp.day)}°</StatNumber>
+              <StatNumber fontSize="md">
+                {tempConverter(degree, day.temp.night)}°
+              </StatNumber>
               <StatLabel>
                 {index === 0 ? 'Today' : namesOfDays[date.getDay()]}
               </StatLabel>
@@ -73,7 +77,7 @@ const FutureWeather: FC<FutureWeatherType[]> = (props): JSX.Element => {
             <Divider
               orientation="vertical"
               height={20}
-              borderColor="black"
+              borderColor={dividerColor}
               opacity={0.1}
             />
           )}

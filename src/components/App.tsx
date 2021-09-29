@@ -33,6 +33,9 @@ export const DegreeContext = createContext<{
   setDegree: () => {},
 });
 
+// TODO:
+// FUTURECOMPONENT (DIVIDER JEST CZARNY I DODAC TEMPERATURE W NOCY)
+
 const App: FC = (): JSX.Element => {
   const [degree, setDegree] = useState<'C' | 'F'>('C');
   const contextValue = { degree, setDegree };

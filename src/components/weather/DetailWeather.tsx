@@ -33,7 +33,7 @@ const DetailWeather: FC<FutureWeatherType> = (props): JSX.Element => {
   const bgColor = useColorModeValue('#fff', '#171923');
 
   return (
-    <Parallax y={[20, 0]} styleOuter={{ marginTop: '-4rem' }}>
+    <Parallax y={[20, 0]} styleOuter={{ marginTop: '-3rem' }}>
       <Box
         bgGradient={gradients[props.weather[0].icon]}
         pb={10}
