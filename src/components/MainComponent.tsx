@@ -1,14 +1,16 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { IconButton } from '@chakra-ui/button';
 import { Box, Heading } from '@chakra-ui/layout';
+import { useToast } from '@chakra-ui/toast';
 
 import { IoSettingsOutline } from 'react-icons/io5';
+import useResizeObserver from 'use-resize-observer';
 
 import { ResponseDataType } from '../api/forecast';
 import { gradients } from '../utils/gradients';
 import CurrentWeather from './weather/CurrentWeather';
-import useResizeObserver from 'use-resize-observer';
+import { borderRadius } from '../constants/styles';
 
 interface MainComponentProps {
   forecast: ResponseDataType;
@@ -16,6 +18,7 @@ interface MainComponentProps {
   setSettingsShown: React.Dispatch<React.SetStateAction<boolean>>;
   setHeight: React.Dispatch<React.SetStateAction<number>>;
   location: string;
+  fetchForecast: () => void;
 }
 
 const MainComponent: FC<MainComponentProps> = ({
@@ -24,12 +27,40 @@ const MainComponent: FC<MainComponentProps> = ({
   setSettingsShown,
   setHeight,
   location,
+  fetchForecast,
 }): JSX.Element => {
   const { ref } = useResizeObserver({
     onResize: e => {
       e.height && setHeight(e.height);
     },
   });
+
+  const toast = useToast();
+
+  useEffect(() => {
+    setTimeout(
+      () =>
+        toast({
+          duration: null,
+          render: () => (
+            <Box
+              color="white"
+              p={3}
+              bg="blue.300"
+              borderRadius={borderRadius}
+              px={5}
+              onClick={() => {
+                fetchForecast();
+                toast.closeAll();
+              }}
+            >
+              <Heading size="sm">Click to update wether</Heading>
+            </Box>
+          ),
+        }),
+      3600000
+    );
+  }, []);
 
   return (
     <Box

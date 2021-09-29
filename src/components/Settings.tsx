@@ -5,7 +5,7 @@ import { FormLabel } from '@chakra-ui/form-control';
 import { Box, Flex, Heading } from '@chakra-ui/layout';
 import { Switch } from '@chakra-ui/switch';
 import { Slide } from '@chakra-ui/transition';
-import { useColorMode } from '@chakra-ui/color-mode';
+import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
 
 import { IoClose } from 'react-icons/io5';
 
@@ -25,6 +25,7 @@ const Settings: FC<SettingsProps> = ({
   settingsShown,
 }): JSX.Element => {
   const { degree, setDegree } = useContext(DegreeContext);
+  const isChecked = useColorModeValue(false, true);
   const { toggleColorMode } = useColorMode();
 
   return (
@@ -77,6 +78,7 @@ const Settings: FC<SettingsProps> = ({
             size="lg"
             aria-label="Dark mode"
             id="dark"
+            isChecked={isChecked}
             onChange={toggleColorMode}
           />
         </Flex>

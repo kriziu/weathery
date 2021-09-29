@@ -25,10 +25,6 @@ interface GeocodeResponseType {
   }[];
 }
 
-// TODO:
-// DARK MODE I FAHRENHEIT
-// MAYBE NA KOMPY WYGLAD
-
 export const DegreeContext = createContext<{
   degree: 'C' | 'F';
   setDegree: React.Dispatch<React.SetStateAction<'C' | 'F'>>;
@@ -88,6 +84,14 @@ const App: FC = (): JSX.Element => {
       .catch(() => {});
   };
 
+  const fetchForecast = (): void => {
+    setLoading(true);
+    getForecast(coords).then(res => {
+      setForecast(res);
+      setLoading(false);
+    });
+  };
+
   useEffect(() => {
     Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
   }, []);
@@ -96,11 +100,7 @@ const App: FC = (): JSX.Element => {
     if (coords.lat === 0 && coords.lng === 0) return;
 
     changeLocation();
-    setLoading(true);
-    getForecast(coords).then(res => {
-      setForecast(res);
-      setLoading(false);
-    });
+    fetchForecast();
     setChangingLocation(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,6 +139,7 @@ const App: FC = (): JSX.Element => {
                   setHeight={setHeight}
                   setChangingLocation={setChangingLocation}
                   setSettingsShown={setSettingsShown}
+                  fetchForecast={fetchForecast}
                 />
                 <SecondaryComponent
                   height={height}
