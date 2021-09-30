@@ -1,5 +1,5 @@
-import axios from "axios";
-import { icons } from "../utils/icons";
+import axios from 'axios';
+import { icons } from '../utils/icons';
 
 interface Description {
   description: string;
@@ -7,8 +7,6 @@ interface Description {
   id: number;
   main: string;
 }
-
-// TODO: Dziedziczenie bo duzo pol sie powtarza
 
 interface SmallWeatherType {
   clouds: number;
@@ -66,6 +64,8 @@ export interface ResponseDataType {
   hourly: HourlyWeatherType[];
 }
 
+const { REACT_APP_FORECAST_API_KEY } = process.env;
+
 export const getForecast = async (coords: {
   lat: number;
   lng: number;
@@ -78,7 +78,7 @@ export const getForecast = async (coords: {
       params: {
         lat,
         lon: lng,
-        appid: "8128f6d612d3981a1bcc39e4639592d3",
+        appid: REACT_APP_FORECAST_API_KEY,
       },
     }
   );

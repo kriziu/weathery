@@ -33,6 +33,8 @@ export const DegreeContext = createContext<{
   setDegree: () => {},
 });
 
+const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
+
 const App: FC = (): JSX.Element => {
   const [degree, setDegree] = useState<'C' | 'F'>('C');
   const contextValue = { degree, setDegree };
@@ -93,7 +95,7 @@ const App: FC = (): JSX.Element => {
   };
 
   useEffect(() => {
-    Geocode.setApiKey('AIzaSyAaNjFR_LN6izfmGEPx_1ZCYMkNfZhxSQs');
+    Geocode.setApiKey(REACT_APP_GOOGLE_MAPS_API_KEY as string);
   }, []);
 
   useEffect(() => {
