@@ -9,7 +9,7 @@ import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode';
 
 import { IoClose } from 'react-icons/io5';
 
-import { WeatherType } from '../api/forecast';
+import { WeatherType } from '../types/forecast';
 import { gradients } from '../utils/gradients';
 import { DegreeContext } from './App';
 

@@ -9,7 +9,7 @@ import { useColorModeValue } from '@chakra-ui/color-mode';
 import DetailWeather from './DetailWeather';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
-import { FutureWeatherType } from '../../api/forecast';
+import { FutureWeatherType } from '../../types/forecast';
 import { icons } from '../../utils/icons';
 import WeatherContainer from './WeatherContainer';
 import { borderRadius } from '../../constants/styles';

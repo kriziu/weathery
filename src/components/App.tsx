@@ -8,12 +8,13 @@ import { Spinner } from '@chakra-ui/spinner';
 import Geocode from 'react-geocode';
 import { ParallaxProvider } from 'react-scroll-parallax';
 
-import { getForecast, ResponseDataType } from '../api/forecast';
+import { getForecast } from '../api/forecast';
 import Settings from './Settings';
 import LocationSlider from './location/LocationSlider';
 import MainComponent from './MainComponent';
 import SecondaryComponent from './SecondaryComponent';
 import theme from '../theme';
+import { ResponseDataType } from '../types/forecast';
 
 interface GeocodeResponseType {
   results: {

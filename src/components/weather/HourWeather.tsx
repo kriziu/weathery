@@ -7,7 +7,7 @@ import { Text } from '@chakra-ui/layout';
 
 import { WiRaindrop } from 'react-icons/wi';
 
-import { HourlyWeatherType } from '../../api/forecast';
+import { HourlyWeatherType } from '../../types/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
 import { icons } from '../../utils/icons';

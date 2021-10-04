@@ -6,7 +6,7 @@ import { Divider } from '@chakra-ui/react';
 
 import { TiLocationArrow } from 'react-icons/ti';
 
-import { WeatherType } from '../../api/forecast';
+import { WeatherType } from '../../types/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
 import { icons } from '../../utils/icons';

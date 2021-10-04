@@ -7,10 +7,10 @@ import { useToast } from '@chakra-ui/toast';
 import { IoSettingsOutline } from 'react-icons/io5';
 import useResizeObserver from 'use-resize-observer';
 
-import { ResponseDataType } from '../api/forecast';
 import { gradients } from '../utils/gradients';
 import CurrentWeather from './weather/CurrentWeather';
 import { borderRadius } from '../constants/styles';
+import { ResponseDataType } from '../types/forecast';
 
 interface MainComponentProps {
   forecast: ResponseDataType;

@@ -4,11 +4,11 @@ import { Box } from '@chakra-ui/layout';
 
 import styled from '@emotion/styled';
 
-import { ResponseDataType } from '../api/forecast';
 import FutureWeather from './weather/FutureWeather';
 import HourWeather from './weather/HourWeather';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { transition } from '../constants/styles';
+import { ResponseDataType } from '../types/forecast';
 
 export const StyledSVG = styled.svg`
   display: block;

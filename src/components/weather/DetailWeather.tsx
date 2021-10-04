@@ -11,7 +11,7 @@ import { WiMoonrise, WiMoonset } from 'react-icons/wi';
 import styled from '@emotion/styled';
 import { Parallax } from 'react-scroll-parallax';
 
-import { FutureWeatherType } from '../../api/forecast';
+import { FutureWeatherType } from '../../types/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
 import { gradients } from '../../utils/gradients';
