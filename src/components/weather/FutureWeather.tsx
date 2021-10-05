@@ -12,7 +12,7 @@ import { DegreeContext } from '../App';
 import { FutureWeatherType } from '../../types/forecast';
 import { icons } from '../../utils/icons';
 import WeatherContainer from './WeatherContainer';
-import { borderRadius } from '../../constants/styles';
+import { borderRadius } from '../../styles/styles';
 
 const namesOfDays = [
   'Sunday',

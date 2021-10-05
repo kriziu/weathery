@@ -15,7 +15,7 @@ import { FutureWeatherType } from '../../types/forecast';
 import { tempConverter } from '../../utils/tempConverter';
 import { DegreeContext } from '../App';
 import { gradients } from '../../utils/gradients';
-import { transition } from '../../constants/styles';
+import { transition } from '../../styles/styles';
 
 const StyledSVG = styled.svg`
   display: block;

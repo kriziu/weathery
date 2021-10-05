@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import FutureWeather from './weather/FutureWeather';
 import HourWeather from './weather/HourWeather';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { transition } from '../constants/styles';
+import { transition } from '../styles/styles';
 import { ResponseDataType } from '../types/forecast';
 
 export const StyledSVG = styled.svg`

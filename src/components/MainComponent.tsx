@@ -9,7 +9,7 @@ import useResizeObserver from 'use-resize-observer';
 
 import { gradients } from '../utils/gradients';
 import CurrentWeather from './weather/CurrentWeather';
-import { borderRadius } from '../constants/styles';
+import { borderRadius } from '../styles/styles';
 import { ResponseDataType } from '../types/forecast';
 
 interface MainComponentProps {

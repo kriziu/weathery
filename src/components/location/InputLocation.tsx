@@ -10,7 +10,7 @@ import PlacesAutocomplete, {
   getLatLng,
 } from 'react-places-autocomplete';
 
-import { borderRadius, borderWidth } from '../../constants/styles';
+import { borderRadius, borderWidth } from '../../styles/styles';
 
 interface InputLocationProps {
   setCoords: React.Dispatch<

@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Box } from '@chakra-ui/layout';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 
-import { borderRadius } from '../../constants/styles';
+import { borderRadius } from '../../styles/styles';
 
 const mapStyles = {
   height: '100%',
