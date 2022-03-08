@@ -5,7 +5,6 @@ import { Center } from '@chakra-ui/layout';
 import { Fade } from '@chakra-ui/transition';
 import { Spinner } from '@chakra-ui/spinner';
 
-import Geocode from 'react-geocode';
 import { ParallaxProvider } from 'react-scroll-parallax';
 
 import { getForecast } from '../api/forecast';
@@ -16,16 +15,6 @@ import SecondaryComponent from './SecondaryComponent';
 import theme from '../theme';
 import { ResponseDataType } from '../types/forecast';
 
-interface GeocodeResponseType {
-  results: {
-    address_components: {
-      long_name: string;
-      short_name: string;
-      types: string[];
-    }[];
-  }[];
-}
-
 export const DegreeContext = createContext<{
   degree: 'C' | 'F';
   setDegree: React.Dispatch<React.SetStateAction<'C' | 'F'>>;
@@ -34,58 +23,16 @@ export const DegreeContext = createContext<{
   setDegree: () => {},
 });
 
-const { REACT_APP_GOOGLE_MAPS_API_KEY } = process.env;
-
 const App: FC = (): JSX.Element => {
   const [degree, setDegree] = useState<'C' | 'F'>('C');
   const contextValue = { degree, setDegree };
 
-  const [location, setLocation] = useState('No location selected');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
   const [changingLocation, setChangingLocation] = useState(true);
   const [forecast, setForecast] = useState<ResponseDataType>();
   const [loading, setLoading] = useState(false);
   const [settingsShown, setSettingsShown] = useState(false);
   const [height, setHeight] = useState(0);
-
-  const changeLocation = (): void => {
-    Geocode.fromLatLng(coords.lat.toString(), coords.lng.toString())
-      .then((response: GeocodeResponseType) => {
-        let city = '',
-          state = '',
-          country = '';
-
-        response.results[0].address_components.forEach(addressComponent => {
-          addressComponent.types.forEach(type => {
-            switch (type) {
-              case 'neighborhood':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'postal_town':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'sublocality':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'locality':
-                city = addressComponent.long_name + ',';
-                break;
-              case 'administrative_area_level_1':
-                state = addressComponent.long_name + ',';
-                break;
-              case 'administrative_area_level_2':
-                state = addressComponent.long_name + ',';
-                break;
-              case 'country':
-                country = addressComponent.long_name;
-                break;
-            }
-          });
-        });
-        setLocation(`${city} ${state} ${country}`);
-      })
-      .catch(() => {});
-  };
 
   const fetchForecast = (): void => {
     setLoading(true);
@@ -96,13 +43,8 @@ const App: FC = (): JSX.Element => {
   };
 
   useEffect(() => {
-    Geocode.setApiKey(REACT_APP_GOOGLE_MAPS_API_KEY as string);
-  }, []);
-
-  useEffect(() => {
     if (coords.lat === 0 && coords.lng === 0) return;
 
-    changeLocation();
     fetchForecast();
     setChangingLocation(false);
 
@@ -117,7 +59,6 @@ const App: FC = (): JSX.Element => {
             changingLocation={changingLocation}
             coords={coords}
             setCoords={setCoords}
-            location={location}
             setChangingLocation={setChangingLocation}
           />
 
@@ -138,8 +79,8 @@ const App: FC = (): JSX.Element => {
               <Fade in={!loading} unmountOnExit>
                 <MainComponent
                   forecast={forecast}
-                  location={location}
                   setHeight={setHeight}
+                  coords={coords}
                   setChangingLocation={setChangingLocation}
                   setSettingsShown={setSettingsShown}
                   fetchForecast={fetchForecast}
@@ -147,7 +88,6 @@ const App: FC = (): JSX.Element => {
                 <SecondaryComponent
                   height={height}
                   setChangingLocation={setChangingLocation}
-                  location={location}
                   forecast={forecast}
                 />
               </Fade>

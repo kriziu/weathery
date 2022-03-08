@@ -9,7 +9,6 @@ import MapGoogle from './MapGoogle';
 
 interface LocationSliderProps {
   changingLocation: boolean;
-  location: string;
   coords: {
     lat: number;
     lng: number;
@@ -25,7 +24,6 @@ interface LocationSliderProps {
 
 const LocationSlider: FC<LocationSliderProps> = ({
   changingLocation,
-  location,
   coords,
   setCoords,
   setChangingLocation,
@@ -39,11 +37,9 @@ const LocationSlider: FC<LocationSliderProps> = ({
           textAlign="center"
           pt={5}
           cursor="pointer"
-          onClick={() =>
-            location !== 'No location selected' && setChangingLocation(false)
-          }
+          onClick={() => setChangingLocation(false)}
         >
-          {location}
+          {coords.lat.toFixed(5) + ', ' + coords.lng.toFixed(5)}
         </Heading>
         <InputLocation setCoords={setCoords} />
         <Box p={[5, 10]} height="sm">

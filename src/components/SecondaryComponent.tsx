@@ -18,14 +18,12 @@ export const StyledSVG = styled.svg`
 
 interface SecondaryComponentProps {
   height: number;
-  location: string;
   setChangingLocation: React.Dispatch<React.SetStateAction<boolean>>;
   forecast: ResponseDataType;
 }
 
 const SecondaryComponent: FC<SecondaryComponentProps> = ({
   height,
-  location,
   setChangingLocation,
   forecast,
 }): JSX.Element => {
@@ -38,9 +36,7 @@ const SecondaryComponent: FC<SecondaryComponentProps> = ({
         `translateY(${height - 80}px)`,
         `translateY(${height - 100}px)`,
       ]}
-      onClick={() =>
-        location !== 'No location selected' && setChangingLocation(false)
-      }
+      onClick={() => setChangingLocation(false)}
     >
       <StyledSVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path
