@@ -1,17 +1,20 @@
 {
   "files": {
-    "main.js": "/weathery/static/js/main.29c69bac.chunk.js",
-    "main.js.map": "/weathery/static/js/main.29c69bac.chunk.js.map",
+    "main.js": "/weathery/static/js/main.34d865e6.chunk.js",
+    "main.js.map": "/weathery/static/js/main.34d865e6.chunk.js.map",
     "runtime-main.js": "/weathery/static/js/runtime-main.79e5b8f2.js",
     "runtime-main.js.map": "/weathery/static/js/runtime-main.79e5b8f2.js.map",
-    "static/js/2.8478d0f5.chunk.js": "/weathery/static/js/2.8478d0f5.chunk.js",
-    "static/js/2.8478d0f5.chunk.js.map": "/weathery/static/js/2.8478d0f5.chunk.js.map",
+    "static/css/2.86afe2b2.chunk.css": "/weathery/static/css/2.86afe2b2.chunk.css",
+    "static/js/2.884bf33e.chunk.js": "/weathery/static/js/2.884bf33e.chunk.js",
+    "static/js/2.884bf33e.chunk.js.map": "/weathery/static/js/2.884bf33e.chunk.js.map",
     "index.html": "/weathery/index.html",
-    "static/js/2.8478d0f5.chunk.js.LICENSE.txt": "/weathery/static/js/2.8478d0f5.chunk.js.LICENSE.txt"
+    "static/css/2.86afe2b2.chunk.css.map": "/weathery/static/css/2.86afe2b2.chunk.css.map",
+    "static/js/2.884bf33e.chunk.js.LICENSE.txt": "/weathery/static/js/2.884bf33e.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.79e5b8f2.js",
-    "static/js/2.8478d0f5.chunk.js",
-    "static/js/main.29c69bac.chunk.js"
+    "static/css/2.86afe2b2.chunk.css",
+    "static/js/2.884bf33e.chunk.js",
+    "static/js/main.34d865e6.chunk.js"
   ]
 }
