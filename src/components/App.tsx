@@ -14,6 +14,7 @@ import MainComponent from './MainComponent';
 import SecondaryComponent from './SecondaryComponent';
 import theme from '../theme';
 import { ResponseDataType } from '../types/forecast';
+import axios from 'axios';
 
 export const DegreeContext = createContext<{
   degree: 'C' | 'F';
@@ -27,6 +28,7 @@ const App: FC = (): JSX.Element => {
   const [degree, setDegree] = useState<'C' | 'F'>('C');
   const contextValue = { degree, setDegree };
 
+  const [locationName, setLocationName] = useState('No location selected...');
   const [coords, setCoords] = useState({ lat: 0, lng: 0 });
   const [changingLocation, setChangingLocation] = useState(true);
   const [forecast, setForecast] = useState<ResponseDataType>();
@@ -48,6 +50,53 @@ const App: FC = (): JSX.Element => {
     fetchForecast();
     setChangingLocation(false);
 
+    axios
+      .get<{
+        address: {
+          city_district?: string;
+          village?: string;
+          city?: string;
+          town?: string;
+          municipality?: string;
+          county?: string;
+        };
+      }>(
+        `http://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&zoom=18&addressdetails=1`
+      )
+      .then(res => {
+        console.log(res.data.address);
+
+        if (res.data.address.village) {
+          setLocationName(res.data.address.village);
+          return;
+        }
+
+        if (res.data.address.city_district) {
+          setLocationName(res.data.address.city_district);
+          return;
+        }
+
+        if (res.data.address.city) {
+          setLocationName(res.data.address.city);
+          return;
+        }
+
+        if (res.data.address.town) {
+          setLocationName(res.data.address.town);
+          return;
+        }
+
+        if (res.data.address.municipality) {
+          setLocationName(res.data.address.municipality);
+          return;
+        }
+
+        if (res.data.address.county) {
+          setLocationName(res.data.address.county);
+          return;
+        }
+      });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coords]);
 
@@ -60,6 +109,7 @@ const App: FC = (): JSX.Element => {
             coords={coords}
             setCoords={setCoords}
             setChangingLocation={setChangingLocation}
+            locationName={locationName}
           />
 
           {forecast && (
@@ -84,6 +134,7 @@ const App: FC = (): JSX.Element => {
                   setChangingLocation={setChangingLocation}
                   setSettingsShown={setSettingsShown}
                   fetchForecast={fetchForecast}
+                  locationName={locationName}
                 />
                 <SecondaryComponent
                   height={height}

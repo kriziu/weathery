@@ -52,10 +52,13 @@ const LocationMarker = ({ coords, setCoords }: Props) => {
 const Map: FC<Props> = ({ coords, setCoords }) => {
   let geoCoords = coords;
 
-  if (coords.lat === 0 && coords.lng === 0)
-    geoCoords = { lat: 52.2297, lng: 21.0122 };
+  if (coords.lat === 0 && coords.lng === 0) {
+    navigator.geolocation.getCurrentPosition(e => {
+      const { longitude, latitude } = e.coords;
 
-  useEffect(() => {});
+      setCoords({ lat: latitude, lng: longitude });
+    });
+  }
 
   return (
     <Box h={500}>

@@ -3,9 +3,10 @@ import { FC } from 'react';
 import { Box, Heading } from '@chakra-ui/layout';
 import { Slide } from '@chakra-ui/transition';
 import { useColorModeValue } from '@chakra-ui/color-mode';
+import 'leaflet-geosearch/dist/geosearch.css';
 
-import InputLocation from './InputLocation';
 import Map from './Map';
+import LocationSearch from './LocationSearch';
 
 interface LocationSliderProps {
   changingLocation: boolean;
@@ -20,6 +21,7 @@ interface LocationSliderProps {
     }>
   >;
   setChangingLocation: React.Dispatch<React.SetStateAction<boolean>>;
+  locationName: string;
 }
 
 const LocationSlider: FC<LocationSliderProps> = ({
@@ -27,6 +29,7 @@ const LocationSlider: FC<LocationSliderProps> = ({
   coords,
   setCoords,
   setChangingLocation,
+  locationName,
 }): JSX.Element => {
   const bgColor = useColorModeValue('white', 'gray.800');
   return (
@@ -39,9 +42,9 @@ const LocationSlider: FC<LocationSliderProps> = ({
           cursor="pointer"
           onClick={() => setChangingLocation(false)}
         >
-          {coords.lat.toFixed(5) + ', ' + coords.lng.toFixed(5)}
+          {locationName}
         </Heading>
-        <InputLocation setCoords={setCoords} />
+        <LocationSearch setCoords={setCoords} />
         <Box p={[5, 10]} height="sm">
           <Map coords={coords} setCoords={setCoords} />
         </Box>

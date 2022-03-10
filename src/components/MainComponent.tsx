@@ -21,6 +21,7 @@ interface MainComponentProps {
     lat: number;
     lng: number;
   };
+  locationName: string;
   fetchForecast: () => void;
 }
 
@@ -30,6 +31,7 @@ const MainComponent: FC<MainComponentProps> = ({
   setSettingsShown,
   setHeight,
   coords,
+  locationName,
   fetchForecast,
 }): JSX.Element => {
   const { ref } = useResizeObserver({
@@ -93,7 +95,7 @@ const MainComponent: FC<MainComponentProps> = ({
           mt={12}
           onClick={() => setChangingLocation(true)}
         >
-          {coords.lat.toFixed(5) + ', ' + coords.lng.toFixed(5)}
+          {locationName}
         </Heading>
 
         <IconButton
