@@ -60,6 +60,7 @@ const Settings: FC<SettingsProps> = ({
           <Switch
             size="lg"
             aria-label="Change to Fahrenheit"
+            isChecked={degree === 'C' ? false : true}
             onChange={() => setDegree(degree === 'C' ? 'F' : 'C')}
           />
           <Heading>F</Heading>

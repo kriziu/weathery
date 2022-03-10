@@ -61,38 +61,38 @@ const App: FC = (): JSX.Element => {
           county?: string;
         };
       }>(
-        `http://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&zoom=18&addressdetails=1`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.lat}&lon=${coords.lng}&zoom=18&addressdetails=1`
       )
       .then(res => {
-        console.log(res.data.address);
+        const { address } = res.data;
 
-        if (res.data.address.village) {
-          setLocationName(res.data.address.village);
+        if (address.village) {
+          setLocationName(address.village);
           return;
         }
 
-        if (res.data.address.city_district) {
-          setLocationName(res.data.address.city_district);
+        if (address.city_district) {
+          setLocationName(address.city_district);
           return;
         }
 
-        if (res.data.address.city) {
-          setLocationName(res.data.address.city);
+        if (address.city) {
+          setLocationName(address.city);
           return;
         }
 
-        if (res.data.address.town) {
-          setLocationName(res.data.address.town);
+        if (address.town) {
+          setLocationName(address.town);
           return;
         }
 
-        if (res.data.address.municipality) {
-          setLocationName(res.data.address.municipality);
+        if (address.municipality) {
+          setLocationName(address.municipality);
           return;
         }
 
-        if (res.data.address.county) {
-          setLocationName(res.data.address.county);
+        if (address.county) {
+          setLocationName(address.county);
           return;
         }
       });
