@@ -5,11 +5,6 @@ import { Spinner } from '@chakra-ui/spinner';
 import { Box, Center, List, ListItem } from '@chakra-ui/layout';
 import { Collapse } from '@chakra-ui/transition';
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
-
 import { borderRadius, borderWidth } from '../../styles/styles';
 
 interface InputLocationProps {
@@ -26,8 +21,8 @@ const InputLocation: FC<InputLocationProps> = ({ setCoords }): JSX.Element => {
   const [browserCoords, setBrowserCoords] = useState({ lat: 0, lng: 0 });
 
   const handleLocationSelect = async (value: string) => {
-    const result = await geocodeByAddress(value);
-    const latLng = await getLatLng(result[0]);
+    // const result = await geocodeByAddress(value);
+    const latLng = { lat: 0, lng: 0 };
     setCoords(latLng);
     setInputValue('');
   };
@@ -45,55 +40,30 @@ const InputLocation: FC<InputLocationProps> = ({ setCoords }): JSX.Element => {
   }, []);
 
   return (
-    <PlacesAutocomplete
-      value={inputValue}
-      onChange={setInputValue}
-      onSelect={handleLocationSelect}
-      searchOptions={{
-        location: new google.maps.LatLng(browserCoords),
-        radius: 2000,
-      }}
-    >
-      {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-        <Box px={[5, 10]} position="relative">
-          <Input {...getInputProps({ placeholder: 'Search location' })} />
+    <Box px={[5, 10]} position="relative">
+      <Input placeholder="Search location" />
 
-          <Collapse in={loading} unmountOnExit>
-            <Center mt={4}>
-              <Spinner />
-            </Center>
-          </Collapse>
+      <Collapse in={false} unmountOnExit>
+        <Center mt={4}>
+          <Spinner />
+        </Center>
+      </Collapse>
 
-          <Collapse in={suggestions.length ? true : false} unmountOnExit>
-            <List
-              zIndex={100}
-              w="100%"
-              spacing={2}
-              border={borderWidth}
-              borderColor="gray.200"
-              p={2}
-              borderRadius={4}
-            >
-              {suggestions.map((suggestion, i) => {
-                const style = {
-                  padding: '.5rem',
-                  borderRadius: borderRadius,
-                  backgroundColor: suggestion.active ? '#e6e6e6' : '',
-                };
-                return (
-                  <ListItem
-                    {...getSuggestionItemProps(suggestion, { style })}
-                    key={i}
-                  >
-                    {suggestion.description}
-                  </ListItem>
-                );
-              })}
-            </List>
-          </Collapse>
-        </Box>
-      )}
-    </PlacesAutocomplete>
+      <Collapse in={true} unmountOnExit>
+        <List
+          zIndex={100}
+          w="100%"
+          spacing={2}
+          border={borderWidth}
+          borderColor="gray.200"
+          p={2}
+          borderRadius={4}
+        >
+          <ListItem>123</ListItem>
+          <ListItem>456</ListItem>
+        </List>
+      </Collapse>
+    </Box>
   );
 };
 

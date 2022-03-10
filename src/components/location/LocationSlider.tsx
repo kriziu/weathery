@@ -5,7 +5,7 @@ import { Slide } from '@chakra-ui/transition';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 
 import InputLocation from './InputLocation';
-import MapGoogle from './MapGoogle';
+import Map from './Map';
 
 interface LocationSliderProps {
   changingLocation: boolean;
@@ -43,7 +43,7 @@ const LocationSlider: FC<LocationSliderProps> = ({
         </Heading>
         <InputLocation setCoords={setCoords} />
         <Box p={[5, 10]} height="sm">
-          <MapGoogle coords={coords} setCoords={setCoords} />
+          <Map coords={coords} setCoords={setCoords} />
         </Box>
       </Box>
     </Slide>
